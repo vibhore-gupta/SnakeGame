@@ -169,7 +169,7 @@ namespace SnakeGame
         private static void ClearTail()
         {
             var tailPixel = snake.GetTailPixel();
-            tailPixel.SetConsoleColor(ConsoleColor.Black);
+            tailPixel.SetConsoleColor(Console.BackgroundColor);
         }
         private static void DrawFood()
         {
@@ -182,11 +182,16 @@ namespace SnakeGame
         }
         private static void SetUp()
         {
+            ClearConsole();
             SetUpWindowSize();
             DrawWalls();
             DrawSnake();
             DrawFood();
             DisplayScore();
+        }
+        private static void ClearConsole()
+        {
+            Console.Clear();
         }
         private static void SetUpWindowSize()
         {
