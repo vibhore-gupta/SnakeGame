@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace SnakeGame
@@ -10,6 +8,7 @@ namespace SnakeGame
     {
         private static readonly int width = 30;
         private static readonly int height = 20;
+        private static readonly string hexUnicode = "\u25A0";
         private static int foodX = 0;
         private static int foodY = 0;
         private static bool isOver = false;
@@ -112,7 +111,7 @@ namespace SnakeGame
         {
             for (var i = 0; i < width; i++)
             {
-                Console.Write("■ ");
+                Console.Write($"{hexUnicode} ");
             }
         }
         private static void DrawHeight(bool setCursorPosition = false)
@@ -123,7 +122,7 @@ namespace SnakeGame
                 {
                     Console.SetCursorPosition(2 * width, i);
                 }                
-                Console.WriteLine("■");
+                Console.WriteLine(hexUnicode);
             }
         }
         private static bool IsOver()
@@ -206,7 +205,8 @@ namespace SnakeGame
         private static void ClearTail()
         {
             var tailPixel = snake.GetTailPixel();
-            tailPixel.SetConsoleColor(Console.BackgroundColor);
+            Console.SetCursorPosition(tailPixel.XCoordinate, tailPixel.YCoordinate);
+            Console.Write(" ");
         }
         private static void DrawFood()
         {
@@ -215,7 +215,7 @@ namespace SnakeGame
             foodY = random.Next(1, height-1);
             Console.SetCursorPosition(foodX, foodY);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("■");
+            Console.Write(hexUnicode);
         }
         private static void SetUp()
         {
@@ -264,7 +264,7 @@ namespace SnakeGame
                 var snakePart = snakeBodyParts[i].Pixel;
                 Console.SetCursorPosition(snakePart.XCoordinate, snakePart.YCoordinate);
                 Console.ForegroundColor = snakePart.ConsoleColor;
-                Console.Write("■");
+                Console.Write(hexUnicode);
             }
             Console.CursorVisible = false;
         }

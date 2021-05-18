@@ -15,12 +15,5 @@ namespace SnakeGame
             ConsoleColor = consoleColor;
             CurrentDirection = currentDirection;
         }
-
-        public void SetConsoleColor(ConsoleColor color)
-        {
-            Console.SetCursorPosition(XCoordinate, YCoordinate);
-            Console.ForegroundColor = color;
-            Console.Write("■");
-        }
     }
 }
