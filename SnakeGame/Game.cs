@@ -22,7 +22,11 @@ namespace SnakeGame
             ConsoleKey.RightArrow
         };
         private static readonly ConsoleKey quitKey = ConsoleKey.Q;
-        public static int Score { get; private set; } = 0;
+        private static readonly ConsoleKey restartKey = ConsoleKey.R;
+        private static int score = 0;
+        private static int eatCounter = 0;
+        private static int sleepTime = 500;
+        private static int level = 1;
 
         public static void RestartLoop()
         {
@@ -35,7 +39,7 @@ namespace SnakeGame
                     {
                         End();
                     }
-                    else
+                    else if(key == restartKey)
                     {
                         Restart();
                     }
@@ -53,12 +57,16 @@ namespace SnakeGame
         {
             SetUp();
             GameLoop();
-            DisplayGameOver();
         }
         private static void GameLoop()
         {
             while (true)
             {
+                if (IsLevelCompleted())
+                {
+                    DisplayLevelCompleted();
+                    break;
+                }
                 ClearTail();
                 if (Console.KeyAvailable)
                 {
@@ -77,14 +85,29 @@ namespace SnakeGame
                     RebuildSnake();
                 }
                 DrawSnake();
-                CheckIfFoodEaten();
+                CheckIfFoodEaten();                
                 if (IsOver())
                 {
+                    DisplayGameOver();
                     break;
                 }
-                Thread.Sleep(500);
+                Thread.Sleep(sleepTime);
             }
         }
+
+        private static void DisplayLevelCompleted()
+        {
+            Console.SetCursorPosition(0, height + 1);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Congrats Level-{level} completed...");
+            Console.WriteLine("Press U to start next level...");
+        }
+
+        private static bool IsLevelCompleted()
+        {
+            return eatCounter == 10;
+        }
+
         private static void DrawWidth(int width)
         {
             for (var i = 0; i < width; i++)
@@ -125,10 +148,11 @@ namespace SnakeGame
         }
         private static void CleanUp()
         {
-            Console.Clear();
             snake = new Snake();
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Score = 0;
+            score = 0;
+            eatCounter = 0;
+            sleepTime = 500;
+            level = 1;
         }
         private static void End()
         {
@@ -139,8 +163,8 @@ namespace SnakeGame
             Console.SetCursorPosition(0, height + 1);
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Game Over!!!");
-            Console.WriteLine("Press any key to restart...");
-            Console.WriteLine("Press q to exit...");
+            Console.WriteLine("Press R to restart...");
+            Console.WriteLine("Press Q to exit...");
             isOver = true;
         }
         private static void CheckIfFoodEaten()
@@ -160,8 +184,21 @@ namespace SnakeGame
         {
             EnlargeSnake();
             IncrementScore();
+            IncrementEatCounter();
             DrawFood();
+            ChangeSleepTime();
         }
+
+        private static void ChangeSleepTime()
+        {
+            sleepTime -= 40;
+        }
+
+        private static void IncrementEatCounter()
+        {
+            eatCounter += 1;
+        }
+
         private static void EnlargeSnake()
         {
             snake.Enlarge();
@@ -183,12 +220,27 @@ namespace SnakeGame
         private static void SetUp()
         {
             ClearConsole();
+            SetForeGroundColor();
             SetUpWindowSize();
             DrawWalls();
             DrawSnake();
             DrawFood();
             DisplayScore();
+            DisplayLevel();
         }
+
+        private static void DisplayLevel()
+        {
+            Console.SetCursorPosition(65, 1);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"Level:{level}");
+        }
+
+        private static void SetForeGroundColor()
+        {
+            Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
         private static void ClearConsole()
         {
             Console.Clear();
@@ -202,7 +254,7 @@ namespace SnakeGame
         {
             Console.SetCursorPosition(65, 0);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"Score:{Score}");
+            Console.Write($"Score:{score}");
         }
         private static void DrawSnake()
         {
@@ -218,7 +270,7 @@ namespace SnakeGame
         }
         private static void IncrementScore()
         {
-            Score += 1;
+            score += 1;
             DisplayScore();
         }
         private static void RebuildSnake(ConsoleKey consoleKey = ConsoleKey.Escape)
