@@ -221,7 +221,7 @@ namespace SnakeGame
         {
             ClearConsole();
             SetForeGroundColor();
-            SetUpWindowSize();
+            //SetUpWindowSize();   // this will throw on platforms macOS, linux. Not supported
             DrawWalls();
             DrawSnake();
             DrawFood();
