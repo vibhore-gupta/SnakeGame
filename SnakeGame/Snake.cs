@@ -32,48 +32,43 @@ namespace SnakeGame
 
         public void RebuildHead()
         {
-            var headPixel = GetHeadPixel();
+            var headPixel = GetPixelByBodyType(BodyPartType.HEAD);
             var (newXCoordinate, newYCoordinate) = SnakeBuilderHelper.GetNewCoordinatesForHead(headPixel, headPixel.CurrentDirection);
-            SetHeadPixels(headPixel, newXCoordinate, newYCoordinate);
+            SetPixelCoordinates(headPixel, newXCoordinate, newYCoordinate);
         }
 
         public void ReBuildHeadAccordingToKey(ConsoleKey consoleKey)
         {
-            var headPixel = GetHeadPixel();
+            var headPixel = GetPixelByBodyType(BodyPartType.HEAD);
             var (newXCoordinate, newYCoordinate) = SnakeBuilderHelper.GetNewCoordinatesForHead(headPixel, consoleKey);
-            SetHeadPixels(headPixel, newXCoordinate, newYCoordinate);
-            SetHeadDirection(headPixel, consoleKey);
+            SetPixelCoordinates(headPixel, newXCoordinate, newYCoordinate);
+            SetDirection(headPixel, consoleKey);
         }
 
         public void Enlarge()
         {
             var currentTail = BodyParts.FirstOrDefault(p => p.PartType == BodyPartType.TAIL);
-            var currentTailPixel = GetTailPixel();
+            var currentTailPixel = GetPixelByBodyType(BodyPartType.TAIL);
             var (newTailXCoordinate, newTailYCoordinate) = SnakeBuilderHelper.GetNewCoordinatesForTail(currentTailPixel, currentTailPixel.CurrentDirection);
             var newTail = new Pixel(newTailXCoordinate, newTailYCoordinate, currentTailPixel.ConsoleColor, currentTailPixel.CurrentDirection);
             currentTail.PartType = BodyPartType.BODY;
             BodyParts.Insert(0, new BodyPart(BodyPartType.TAIL, newTail));
         }
 
-        private void SetHeadDirection(Pixel headPixel, ConsoleKey consoleKey)
+        private void SetDirection(Pixel pixel, ConsoleKey consoleKey)
         {
-            headPixel.CurrentDirection = SnakeBuilderHelper.GetNewDirectionForHead(consoleKey);
+            pixel.CurrentDirection = SnakeBuilderHelper.GetNewDirectionForHead(consoleKey);
         }
 
-        private void SetHeadPixels(Pixel headPixel, int newXCoordinate, int newYCoordinate)
+        private void SetPixelCoordinates(Pixel pixel, int newXCoordinate, int newYCoordinate)
         {
-            headPixel.XCoordinate = newXCoordinate;
-            headPixel.YCoordinate = newYCoordinate;
+            pixel.XCoordinate = newXCoordinate;
+            pixel.YCoordinate = newYCoordinate;
         }
 
-        public Pixel GetHeadPixel()
+        public Pixel GetPixelByBodyType(BodyPartType bodyPartType)
         {
-            return BodyParts.FirstOrDefault(p => p.PartType == BodyPartType.HEAD).Pixel;
-        }
-
-        public Pixel GetTailPixel()
-        {
-            return BodyParts.FirstOrDefault(p => p.PartType == BodyPartType.TAIL).Pixel;
+            return BodyParts.FirstOrDefault(p => p.PartType == bodyPartType).Pixel;
         }
     }
     public class BodyPart

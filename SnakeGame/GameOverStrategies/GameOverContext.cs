@@ -1,0 +1,23 @@
+﻿using SnakeGame.GameOverStrategies.Interfaces;
+using System.Collections.Generic;
+
+namespace SnakeGame.GameOverStrategies
+{
+    public class GameOverContext
+    {
+        private readonly Dictionary<int, IGameOver> levelToStrategy;
+        public GameOverContext()
+        {
+            levelToStrategy = new Dictionary<int, IGameOver>
+            {
+                {1, new Level1Strategy() },
+                {2, new Level2Strategy() }
+            };
+        }
+        public bool IsOver(int level, int headXCoordinate, int headYCoordinate)
+        {
+            var strategy = levelToStrategy[level];
+            return strategy.IsOver(headXCoordinate, headYCoordinate);
+        }
+    }
+}
