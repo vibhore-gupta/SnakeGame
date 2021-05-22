@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SnakeGame\SnakeGame.csproj" />
+    <ProjectReference Include="..\SnakeGame\SnakeGame.Source.csproj" />
   </ItemGroup>
 
 </Project>

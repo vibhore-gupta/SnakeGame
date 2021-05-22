@@ -1,4 +1,4 @@
-﻿namespace SnakeGame.GameOverStrategies.Interfaces
+﻿namespace SnakeGame.Source.GameOverStrategies.Interfaces
 {
     public interface IGameOver
     {

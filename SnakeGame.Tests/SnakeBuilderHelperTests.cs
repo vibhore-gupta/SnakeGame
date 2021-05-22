@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SnakeGame.Source;
+using SnakeGame.Source.Common;
+using System;
 using Xunit;
 
 namespace SnakeGame.Tests

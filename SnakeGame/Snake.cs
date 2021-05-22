@@ -1,8 +1,9 @@
-﻿using System;
+﻿using SnakeGame.Source.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SnakeGame
+namespace SnakeGame.Source
 {
     public class Snake
     {
@@ -69,6 +70,11 @@ namespace SnakeGame
         public Pixel GetPixelByBodyType(BodyPartType bodyPartType)
         {
             return BodyParts.FirstOrDefault(p => p.PartType == bodyPartType).Pixel;
+        }
+
+        public List<KeyValuePair<int, int>> GetSnakeCoordinates()
+        {
+            return BodyParts.Select(x => new KeyValuePair<int, int>(x.Pixel.XCoordinate, x.Pixel.YCoordinate)).ToList();
         }
     }
     public class BodyPart

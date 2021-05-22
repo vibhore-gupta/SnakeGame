@@ -1,6 +1,6 @@
-﻿using SnakeGame.GameOverStrategies.Interfaces;
+﻿using SnakeGame.Source.GameOverStrategies.Interfaces;
 
-namespace SnakeGame.GameOverStrategies
+namespace SnakeGame.Source.GameOverStrategies
 {
     public class Level1Strategy : GameOverStrategyBase, IGameOver
     {

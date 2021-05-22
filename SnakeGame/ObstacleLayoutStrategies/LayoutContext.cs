@@ -1,7 +1,7 @@
-﻿using SnakeGame.ObstacleLayoutStrategies.Interfaces;
+﻿using SnakeGame.Source.ObstacleLayoutStrategies.Interfaces;
 using System.Collections.Generic;
 
-namespace SnakeGame.ObstacleLayoutStrategies
+namespace SnakeGame.Source.ObstacleLayoutStrategies
 {
     public class LayoutContext
     {
@@ -11,7 +11,8 @@ namespace SnakeGame.ObstacleLayoutStrategies
             levelToStrategy = new Dictionary<int, ILayoutDrawer>
             {
                 {1, new Level1Strategy() },
-                {2, new Level2Strategy() }
+                {2, new Level2Strategy() },
+                {3, new Level3Strategy() }
             };
         }
         public void DrawObstaclesForLevel(int level)

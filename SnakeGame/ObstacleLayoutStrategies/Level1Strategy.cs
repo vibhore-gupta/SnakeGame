@@ -1,6 +1,6 @@
-﻿using SnakeGame.ObstacleLayoutStrategies.Interfaces;
+﻿using SnakeGame.Source.ObstacleLayoutStrategies.Interfaces;
 
-namespace SnakeGame.ObstacleLayoutStrategies
+namespace SnakeGame.Source.ObstacleLayoutStrategies
 {
     public class Level1Strategy : LayoutStrategyBase, ILayoutDrawer
     {

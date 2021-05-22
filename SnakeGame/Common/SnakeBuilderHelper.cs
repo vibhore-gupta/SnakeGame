@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SnakeGame
+namespace SnakeGame.Source.Common
 {
     public class SnakeBuilderHelper
     {

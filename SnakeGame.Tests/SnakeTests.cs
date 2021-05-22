@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SnakeGame.Source;
+using System;
 using Xunit;
 
 namespace SnakeGame.Tests
@@ -125,6 +126,34 @@ namespace SnakeGame.Tests
             Assert.Equal(yCoordinate, snake.BodyParts[2].Pixel.YCoordinate);
             Assert.Equal(direction, snake.BodyParts[2].Pixel.CurrentDirection);
             Assert.Equal(consoleColor, snake.BodyParts[2].Pixel.ConsoleColor);
+        }
+
+        [Fact]
+        public void Snake_WhenCalledGetSnakeCoordinates_ReturnsAllBodyPartsCoordinates()
+        {
+            // Arrange
+            var snake = new Snake();
+            var headPixel = snake.GetPixelByBodyType(BodyPartType.HEAD);
+            var headX = headPixel.XCoordinate;
+            var headY = headPixel.YCoordinate;
+            var tailPixel = snake.GetPixelByBodyType(BodyPartType.TAIL);
+            var tailX = tailPixel.XCoordinate;
+            var tailY = tailPixel.YCoordinate;
+            var bodyPixel = snake.GetPixelByBodyType(BodyPartType.BODY);
+            var bodyX = bodyPixel.XCoordinate;
+            var bodyY = bodyPixel.YCoordinate;
+
+            // Act
+            var coordinates = snake.GetSnakeCoordinates();
+
+            // Assert
+            Assert.Equal(3, coordinates.Count);
+            Assert.Equal(tailX, coordinates[0].Key);
+            Assert.Equal(tailY, coordinates[0].Value);
+            Assert.Equal(bodyX, coordinates[1].Key);
+            Assert.Equal(bodyY, coordinates[1].Value);
+            Assert.Equal(headX, coordinates[2].Key);
+            Assert.Equal(headY, coordinates[2].Value);
         }
     }
 }

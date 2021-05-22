@@ -1,4 +1,4 @@
-﻿namespace SnakeGame.GameOverStrategies
+﻿namespace SnakeGame.Source.GameOverStrategies
 {
     public class GameOverStrategyBase
     {

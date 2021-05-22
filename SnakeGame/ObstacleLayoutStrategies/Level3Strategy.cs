@@ -5,7 +5,7 @@ using System;
 
 namespace SnakeGame.Source.ObstacleLayoutStrategies
 {
-    public class Level2Strategy : LayoutStrategyBase, ILayoutDrawer
+    public class Level3Strategy : LayoutStrategyBase, ILayoutDrawer
     {
         public void Draw()
         {
@@ -15,7 +15,7 @@ namespace SnakeGame.Source.ObstacleLayoutStrategies
 
         private void SetObstacles()
         {
-            var section = ConfigurationHelper.GetSection("level2ObstacleCoordinates");
+            var section = ConfigurationHelper.GetSection("level3ObstacleCoordinates");
             foreach (var subSection in section.GetChildren())
             {
                 var xCoordinate = subSection.GetValue<int>("x");
@@ -24,6 +24,5 @@ namespace SnakeGame.Source.ObstacleLayoutStrategies
                 Console.Write(hexUnicode);
             }
         }
-
     }
 }

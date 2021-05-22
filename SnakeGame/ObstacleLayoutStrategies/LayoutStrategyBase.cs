@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SnakeGame.ObstacleLayoutStrategies
+namespace SnakeGame.Source.ObstacleLayoutStrategies
 {
     public class LayoutStrategyBase
     {

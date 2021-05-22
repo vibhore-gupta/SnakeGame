@@ -1,14 +1,14 @@
-﻿using SnakeGame.GameOverStrategies;
-using SnakeGame.ObstacleLayoutStrategies;
+﻿using SnakeGame.Source.FoodGenerationStrategies;
+using SnakeGame.Source.GameOverStrategies;
+using SnakeGame.Source.ObstacleLayoutStrategies;
 using System;
 using System.Linq;
 using System.Threading;
 
-namespace SnakeGame
+namespace SnakeGame.Source
 {
     public class Game
     {
-        private static readonly int width = 30;
         private static readonly int height = 20;
         private static readonly int totalLevels = 5;
         private static readonly string hexUnicode = "\u25A0";
@@ -18,6 +18,7 @@ namespace SnakeGame
         private static Snake snake = new Snake();
         private static readonly LayoutContext layoutContext = new LayoutContext();
         private static readonly GameOverContext gameOverContext = new GameOverContext();
+        private static readonly FoodDrawContext foodDrawContext = new FoodDrawContext();
         private static readonly ConsoleKey[] AllowedKeys = new ConsoleKey[]
         {
             ConsoleKey.UpArrow,
@@ -131,7 +132,7 @@ namespace SnakeGame
 
         private static bool IsLevelCompleted()
         {
-            return eatCounter == 10;
+            return eatCounter == 5;
         }
 
         private static void Restart()
@@ -185,7 +186,7 @@ namespace SnakeGame
             EnlargeSnake();
             IncrementScore();
             IncrementEatCounter();
-            DrawFood();
+            (foodX, foodY) = foodDrawContext.DrawFoodForLevel(level, snake.GetSnakeCoordinates());
             ChangeSleepTime();
         }
 
@@ -209,22 +210,14 @@ namespace SnakeGame
             Console.SetCursorPosition(tailPixel.XCoordinate, tailPixel.YCoordinate);
             Console.Write(" ");
         }
-        private static void DrawFood()
-        {
-            var random = new Random();
-            foodX = random.Next(1, width);
-            foodY = random.Next(1, height);
-            Console.SetCursorPosition(foodX, foodY);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(hexUnicode);
-        }
+
         private static void SetUp()
         {
             ClearConsole();
             SetForeGroundColor();
             layoutContext.DrawObstaclesForLevel(level);
             DrawSnake();
-            DrawFood();
+            (foodX, foodY) = foodDrawContext.DrawFoodForLevel(level, snake.GetSnakeCoordinates());
             DisplayScore();
             DisplayLevel();
         }

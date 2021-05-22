@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SnakeGame
+namespace SnakeGame.Source
 {
     public class Pixel
     {

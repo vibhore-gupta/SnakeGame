@@ -4,7 +4,7 @@ using SnakeGame.Source.GameOverStrategies.Interfaces;
 
 namespace SnakeGame.Source.GameOverStrategies
 {
-    public class Level2Strategy : GameOverStrategyBase, IGameOver
+    public class Level3Strategy : GameOverStrategyBase, IGameOver
     {
         public bool IsOver(int headXCoordinate, int headYCoordinate)
         {
@@ -14,7 +14,7 @@ namespace SnakeGame.Source.GameOverStrategies
 
         private bool IsHittingTheObstacles(int headXCoordinate, int headYCoordinate)
         {
-            var section = ConfigurationHelper.GetSection("level2ObstacleCoordinates");
+            var section = ConfigurationHelper.GetSection("level3ObstacleCoordinates");
             foreach (var subSection in section.GetChildren())
             {
                 var xCoordinate = subSection.GetValue<int>("x");

@@ -1,8 +1,8 @@
-﻿namespace SnakeGame
+﻿namespace SnakeGame.Source
 {
     class Program
     {   
-        static void Main(string[] args)
+        static void Main()
         {
             Game.Start();
             Game.RestartLoop();
