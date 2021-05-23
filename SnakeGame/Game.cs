@@ -15,7 +15,7 @@ namespace SnakeGame.Source
         private static int foodX = 0;
         private static int foodY = 0;
         private static bool isOver = false;
-        private static Snake snake = new Snake();
+        private static Snake snake = new Snake(1);
         private static readonly LayoutContext layoutContext = new LayoutContext();
         private static readonly GameOverContext gameOverContext = new GameOverContext();
         private static readonly FoodDrawContext foodDrawContext = new FoodDrawContext();
@@ -132,7 +132,7 @@ namespace SnakeGame.Source
 
         private static bool IsLevelCompleted()
         {
-            return eatCounter == 5;
+            return eatCounter == 10;
         }
 
         private static void Restart()
@@ -145,12 +145,16 @@ namespace SnakeGame.Source
         }
         private static void CleanUp(bool nextLevel = false)
         {
-            if (!nextLevel)
+            if (nextLevel)
             {
+                snake = new Snake(level * 2);
+            }
+            else
+            {                
                 score = 0;
                 level = 1;
+                snake = new Snake(level);
             }
-            snake = new Snake();
             eatCounter = 0;
             sleepTime = 500;
             isCurrentLevelCompleted = false;

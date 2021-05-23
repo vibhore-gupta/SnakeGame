@@ -14,7 +14,7 @@ namespace SnakeGame.Tests
             int xCoordinate, int yCoordinate, ConsoleColor consoleColor)
         {
             // Arrange
-            var snake = new Snake();
+            var snake = new Snake(1);
 
             // Act
             var pixel = snake.GetPixelByBodyType(bodyPartType);
@@ -30,7 +30,7 @@ namespace SnakeGame.Tests
         public void Snake_WhenCalledEnlarge_AddOneMorePixelToTheStart()
         {
             // Arrange
-            var snake = new Snake();
+            var snake = new Snake(1);
             var currentTailPixel = snake.GetPixelByBodyType(BodyPartType.TAIL);
             var currentTailPart = snake.BodyParts[0];
 
@@ -57,7 +57,7 @@ namespace SnakeGame.Tests
         public void Snake_WhenCalledReBuildTailAndBody_ChangesTheTailAndBodyCoordinates()
         {
             // Arrange
-            var snake = new Snake();
+            var snake = new Snake(1);
             var tailPixel = snake.GetPixelByBodyType(BodyPartType.TAIL);
             var bodyPixel = snake.GetPixelByBodyType(BodyPartType.BODY);
             var headPixel = snake.GetPixelByBodyType(BodyPartType.HEAD);
@@ -88,7 +88,7 @@ namespace SnakeGame.Tests
         public void Snake_WhenCalledRebuildHead_ChangesHeadCoordinates()
         {
             // Arrange
-            var snake = new Snake();
+            var snake = new Snake(1);
             var headPixel = snake.GetPixelByBodyType(BodyPartType.HEAD);
             var headX = headPixel.XCoordinate;
             var headY = headPixel.YCoordinate;
@@ -116,7 +116,7 @@ namespace SnakeGame.Tests
             int xCoordinate, int yCoordinate, ConsoleColor consoleColor)
         {
             // Arrange
-            var snake = new Snake();
+            var snake = new Snake(1);
 
             // Act
             snake.ReBuildHeadAccordingToKey(key);
@@ -132,7 +132,7 @@ namespace SnakeGame.Tests
         public void Snake_WhenCalledGetSnakeCoordinates_ReturnsAllBodyPartsCoordinates()
         {
             // Arrange
-            var snake = new Snake();
+            var snake = new Snake(1);
             var headPixel = snake.GetPixelByBodyType(BodyPartType.HEAD);
             var headX = headPixel.XCoordinate;
             var headY = headPixel.YCoordinate;
@@ -154,6 +154,24 @@ namespace SnakeGame.Tests
             Assert.Equal(bodyY, coordinates[1].Value);
             Assert.Equal(headX, coordinates[2].Key);
             Assert.Equal(headY, coordinates[2].Value);
+        }
+
+        [Theory]
+        [InlineData(0, 3)]
+        [InlineData(1, 3)]
+        [InlineData(2, 4)]
+        [InlineData(10, 12)]
+        public void Snake_WhenInstanciatedWithANumber_ReturnsSnakeOfGivenLength(int bodyPartCount, int snakeLength)
+        {
+            // Arrange
+            var snake = new Snake(bodyPartCount);
+
+            // Act
+
+            // Assert
+            Assert.Equal(snakeLength, snake.BodyParts.Count);
+            Assert.Equal(BodyPartType.TAIL, snake.BodyParts[0].PartType);
+            Assert.Equal(BodyPartType.HEAD, snake.BodyParts[snakeLength-1].PartType);
         }
     }
 }

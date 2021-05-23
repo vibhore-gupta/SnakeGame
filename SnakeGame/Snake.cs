@@ -7,16 +7,16 @@ namespace SnakeGame.Source
 {
     public class Snake
     {
+        private int xCoordinate;
+        private readonly int yCoordinate;
         public List<BodyPart> BodyParts { get; }
     
-        public Snake()
+        public Snake(int bodyPartCount)
         {
-            BodyParts = new List<BodyPart>
-            {
-                new BodyPart (BodyPartType.TAIL, new Pixel(15, 16, ConsoleColor.Green, Direction.RIGHT)),
-                new BodyPart (BodyPartType.BODY, new Pixel(16, 16, ConsoleColor.Green, Direction.RIGHT)),
-                new BodyPart (BodyPartType.HEAD, new Pixel(17, 16, ConsoleColor.DarkBlue, Direction.RIGHT))
-            };
+            xCoordinate = 15;
+            yCoordinate = 16;
+            BodyParts = new List<BodyPart>();
+            Generate(bodyPartCount);
         }
 
         public void ReBuildTailAndBody()
@@ -75,6 +75,21 @@ namespace SnakeGame.Source
         public List<KeyValuePair<int, int>> GetSnakeCoordinates()
         {
             return BodyParts.Select(x => new KeyValuePair<int, int>(x.Pixel.XCoordinate, x.Pixel.YCoordinate)).ToList();
+        }
+
+        private void Generate(int bodyPartsCount)
+        {
+            if(bodyPartsCount == 0)
+            {
+                bodyPartsCount = 1;
+            }
+            BodyParts.Add(new BodyPart(BodyPartType.TAIL, new Pixel(xCoordinate, yCoordinate, ConsoleColor.Green, Direction.RIGHT)));            
+            for (var i = 0; i < bodyPartsCount; i++)
+            {
+                xCoordinate += 1;
+                BodyParts.Add(new BodyPart(BodyPartType.BODY, new Pixel(xCoordinate, yCoordinate, ConsoleColor.Green, Direction.RIGHT)));
+            }
+            BodyParts.Add(new BodyPart(BodyPartType.HEAD, new Pixel(xCoordinate + 1, yCoordinate, ConsoleColor.DarkBlue, Direction.RIGHT)));
         }
     }
     public class BodyPart
