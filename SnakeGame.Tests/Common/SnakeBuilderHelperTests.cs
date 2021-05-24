@@ -3,7 +3,7 @@ using SnakeGame.Source.Common;
 using System;
 using Xunit;
 
-namespace SnakeGame.Tests
+namespace SnakeGame.Tests.Common
 {
     public class SnakeBuilderHelperTests
     {
