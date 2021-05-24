@@ -1,5 +1,5 @@
 # SnakeGame
-Console based classic snake game implemented with object oriented principles.
+Console based classic snake game implemented with object oriented design patterns.
 
 It is built with .net 5 and runs on console/terminal window.
 
