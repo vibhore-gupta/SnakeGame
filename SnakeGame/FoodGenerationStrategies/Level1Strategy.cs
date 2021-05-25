@@ -7,7 +7,7 @@ namespace SnakeGame.Source.FoodGenerationStrategies
     {
         public (int, int) Draw(List<KeyValuePair<int, int>> coordinates)
         {
-            var (foodX, foodY) = DrawFoodWithinWallsAndOnSnake(coordinates);
+            var (foodX, foodY) = DrawFoodWithinWallsAndNotOnSnake(coordinates);
             DrawFood(foodX, foodY);
             return (foodX, foodY);
         }

@@ -10,7 +10,7 @@ namespace SnakeGame.Source.FoodGenerationStrategies
         private readonly int height = 20;
         protected readonly string hexUnicode = "\u25A0";
 
-        public (int, int) DrawFoodWithinWallsAndOnSnake(List<KeyValuePair<int, int>> coordinates)
+        public (int, int) DrawFoodWithinWallsAndNotOnSnake(List<KeyValuePair<int, int>> coordinates)
         {
             var (foodX, foodY) = GenerateFoodWithinWalls();
             while (coordinates.Any(x => x.Key == foodX && x.Value == foodY))
@@ -23,7 +23,7 @@ namespace SnakeGame.Source.FoodGenerationStrategies
         private (int, int) GenerateFoodWithinWalls()
         {
             var random = new Random();
-            var foodX = random.Next(1, width);
+            var foodX = random.Next(1, 2 * width);
             var foodY = random.Next(1, height);
             return (foodX, foodY);
         }

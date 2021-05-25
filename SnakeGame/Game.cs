@@ -10,7 +10,7 @@ namespace SnakeGame.Source
     public class Game
     {
         private static readonly int height = 20;
-        private static readonly int totalLevels = 5;
+        private static readonly int totalLevels = 3;
         private static readonly string hexUnicode = "\u25A0";
         private static int foodX = 0;
         private static int foodY = 0;
@@ -72,12 +72,18 @@ namespace SnakeGame.Source
             SetUp();
             GameLoop();
         }
+
         private static void GameLoop()
         {
             while (true)
             {
                 if (IsLevelCompleted())
                 {
+                    if (CheckIfAllLevelsDone())
+                    {
+                        DisplayChampionText();
+                        break;
+                    }
                     DisplayLevelCompleted();
                     MarkCurrentLevelCompleted();
                     IncrementLevel();
@@ -112,6 +118,20 @@ namespace SnakeGame.Source
             }
         }
 
+        private static void DisplayChampionText()
+        {
+            Console.SetCursorPosition(0, height + 1);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"You are a champion now.");
+            Console.WriteLine("Please wait until new levels are added.");
+            Console.WriteLine("Press Q to exit...");
+        }
+
+        private static bool CheckIfAllLevelsDone()
+        {
+            return level == totalLevels;
+        }
+
         private static void IncrementLevel()
         {
             level += 1;
@@ -143,6 +163,7 @@ namespace SnakeGame.Source
                 Start();
             }            
         }
+
         private static void CleanUp(bool nextLevel = false)
         {
             if (nextLevel)
@@ -159,10 +180,12 @@ namespace SnakeGame.Source
             sleepTime = 500;
             isCurrentLevelCompleted = false;
         }
+
         private static void End()
         {
             Environment.Exit(0);
         }
+
         private static void DisplayGameOver()
         {
             Console.SetCursorPosition(0, height + 1);
@@ -172,6 +195,7 @@ namespace SnakeGame.Source
             Console.WriteLine("Press Q to exit...");
             isOver = true;
         }
+
         private static void CheckIfFoodEaten()
         {
             if (IsFoodEaten())
@@ -179,12 +203,14 @@ namespace SnakeGame.Source
                 PerformPostFoodEatingActivities();
             }
         }
+
         private static bool IsFoodEaten()
         {
             var headPixel = snake.GetPixelByBodyType(BodyPartType.HEAD);
             return foodX == headPixel.XCoordinate &&
                 foodY == headPixel.YCoordinate;
         }
+
         private static void PerformPostFoodEatingActivities()
         {
             EnlargeSnake();
@@ -208,6 +234,7 @@ namespace SnakeGame.Source
         {
             snake.Enlarge();
         }
+
         private static void ClearTail()
         {
             var tailPixel = snake.GetPixelByBodyType(BodyPartType.TAIL);
@@ -249,6 +276,7 @@ namespace SnakeGame.Source
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write($"Score: {score}");
         }
+
         private static void DrawSnake()
         {
             var snakeBodyParts = snake.BodyParts;
@@ -261,11 +289,13 @@ namespace SnakeGame.Source
             }
             Console.CursorVisible = false;
         }
+
         private static void IncrementScore()
         {
             score += 1;
             DisplayScore();
         }
+
         private static void RebuildSnake(ConsoleKey consoleKey = ConsoleKey.Escape)
         {
             snake.ReBuildTailAndBody();
