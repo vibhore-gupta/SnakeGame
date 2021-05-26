@@ -47,6 +47,28 @@ namespace SnakeGame.Tests.Common
             configValuesList.Add(new KeyValuePair<int, int>(43, 13));
             configValuesList.Add(new KeyValuePair<int, int>(44, 13));
 
+            configValuesList.Add(new KeyValuePair<int, int>(2, 1));
+            configValuesList.Add(new KeyValuePair<int, int>(4, 2));
+            configValuesList.Add(new KeyValuePair<int, int>(6, 3));
+            configValuesList.Add(new KeyValuePair<int, int>(8, 4));
+            configValuesList.Add(new KeyValuePair<int, int>(10, 5));
+            configValuesList.Add(new KeyValuePair<int, int>(2, 19));
+            configValuesList.Add(new KeyValuePair<int, int>(4, 18));
+            configValuesList.Add(new KeyValuePair<int, int>(6, 17));
+            configValuesList.Add(new KeyValuePair<int, int>(8, 16));
+            configValuesList.Add(new KeyValuePair<int, int>(10, 15));
+            configValuesList.Add(new KeyValuePair<int, int>(58, 19));
+            configValuesList.Add(new KeyValuePair<int, int>(56, 18));
+            configValuesList.Add(new KeyValuePair<int, int>(54, 17));
+            configValuesList.Add(new KeyValuePair<int, int>(52, 16));
+            configValuesList.Add(new KeyValuePair<int, int>(50, 15));
+            configValuesList.Add(new KeyValuePair<int, int>(58, 1));
+            configValuesList.Add(new KeyValuePair<int, int>(56, 2));
+            configValuesList.Add(new KeyValuePair<int, int>(54, 3));
+            configValuesList.Add(new KeyValuePair<int, int>(52, 4));
+            configValuesList.Add(new KeyValuePair<int, int>(50, 5));
+
+
             // Act
             var section = ConfigurationHelper.GetSection(sectionName);
 

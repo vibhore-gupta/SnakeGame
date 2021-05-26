@@ -9,6 +9,7 @@ namespace SnakeGame.Source
 {
     public class Game
     {
+        private static DateTime foodStartTime = DateTime.Now;
         private static readonly int height = 20;
         private static readonly int totalLevels = 3;
         private static readonly string hexUnicode = "\u25A0";
@@ -30,7 +31,8 @@ namespace SnakeGame.Source
         private static readonly ConsoleKey restartKey = ConsoleKey.R;
         private static readonly ConsoleKey levelUpgradeKey = ConsoleKey.L;
         private static int score = 0;
-        private static int eatCounter = 0;
+        private static int remainingEatCounter = 10;
+        private static int totalEatCounter = 0;
         private static int sleepTime = 500;
         private static int level = 1;
         private static bool isCurrentLevelCompleted = false;
@@ -152,7 +154,7 @@ namespace SnakeGame.Source
 
         private static bool IsLevelCompleted()
         {
-            return eatCounter == 10;
+            return remainingEatCounter == 0;
         }
 
         private static void Restart()
@@ -175,8 +177,9 @@ namespace SnakeGame.Source
                 score = 0;
                 level = 1;
                 snake = new Snake(level);
+                totalEatCounter = 0;
             }
-            eatCounter = 0;
+            remainingEatCounter = 10;
             sleepTime = 500;
             isCurrentLevelCompleted = false;
         }
@@ -214,10 +217,17 @@ namespace SnakeGame.Source
         private static void PerformPostFoodEatingActivities()
         {
             EnlargeSnake();
-            IncrementScore();
-            IncrementEatCounter();
+            DecrementRemainingEatCounter();
+            IncrementEatCounter();            
             (foodX, foodY) = foodDrawContext.DrawFoodForLevel(level, snake.GetSnakeCoordinates());
+            CalculateScore();
             ChangeSleepTime();
+            DisplayStatistics();            
+        }
+
+        private static void DecrementRemainingEatCounter()
+        {
+            remainingEatCounter -= 1;
         }
 
         private static void ChangeSleepTime()
@@ -227,7 +237,7 @@ namespace SnakeGame.Source
 
         private static void IncrementEatCounter()
         {
-            eatCounter += 1;
+            totalEatCounter += 1;
         }
 
         private static void EnlargeSnake()
@@ -249,13 +259,13 @@ namespace SnakeGame.Source
             layoutContext.DrawObstaclesForLevel(level);
             DrawSnake();
             (foodX, foodY) = foodDrawContext.DrawFoodForLevel(level, snake.GetSnakeCoordinates());
-            DisplayScore();
-            DisplayLevel();
+            DisplayStatistics();
+            DisplayControls();
         }
 
         private static void DisplayLevel()
         {
-            Console.SetCursorPosition(65, 1);
+            Console.SetCursorPosition(66, 1);
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write($"Level: {level} of {totalLevels}");
         }
@@ -270,11 +280,11 @@ namespace SnakeGame.Source
             Console.Clear();
         }
 
-        private static void DisplayScore()
+        private static void DisplayTotalEatCounter()
         {
-            Console.SetCursorPosition(65, 0);
+            Console.SetCursorPosition(66, 3);
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"Score: {score}");
+            Console.Write($"Total Fruits Eaten: {totalEatCounter}");
         }
 
         private static void DrawSnake()
@@ -290,12 +300,6 @@ namespace SnakeGame.Source
             Console.CursorVisible = false;
         }
 
-        private static void IncrementScore()
-        {
-            score += 1;
-            DisplayScore();
-        }
-
         private static void RebuildSnake(ConsoleKey consoleKey = ConsoleKey.Escape)
         {
             snake.ReBuildTailAndBody();
@@ -305,6 +309,72 @@ namespace SnakeGame.Source
                 return;
             }
             snake.RebuildHead();
+        }
+
+        private static void DisplayStatistics()
+        {
+            Console.SetCursorPosition(65, 0);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("Game Statistics:");
+            DisplayLevel();
+            DisplayScore();
+            DisplayTotalEatCounter();            
+            DisplayFruitsToBeEatenAtThisLevel();
+            DisplaySnakeSpeed();
+        }
+
+        private static void DisplayScore()
+        {
+            Console.SetCursorPosition(66, 2);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"Score: {score}");
+        }
+
+        private static void DisplayFruitsToBeEatenAtThisLevel()
+        {
+            Console.SetCursorPosition(66, 4);
+            Console.ForegroundColor = ConsoleColor.Red;
+            var label = remainingEatCounter == 10 ? $"{remainingEatCounter}" : $"0{remainingEatCounter}";
+            Console.Write($"Fruits left at this level: {label}");
+        }
+
+        private static void DisplaySnakeSpeed()
+        {
+            Console.SetCursorPosition(66, 5);
+            Console.ForegroundColor = ConsoleColor.Red;
+            var label = $"{Math.Round(1000.0M/sleepTime, 1)} blocks/sec";
+            Console.Write($"Speed: {label}");
+        }
+
+        private static void DisplayControls()
+        {
+            Console.SetCursorPosition(66, 8);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("Controls");
+
+            Console.SetCursorPosition(67, 9);
+            Console.WriteLine("Move Up: Up Arrow");
+            Console.SetCursorPosition(67, 10);
+            Console.WriteLine("Move Down: Down Arrow");
+            Console.SetCursorPosition(67, 11);
+            Console.WriteLine("Move Left: Left Arrow");
+            Console.SetCursorPosition(67, 12);
+            Console.WriteLine("Move Right: Right Arrow");
+        }
+
+        private static void CalculateScore()
+        {
+            var elapsedTimeInSeconds = (DateTime.Now - foodStartTime).TotalSeconds;
+            var timeCoefficient = 0.5;
+            var lengthCoefficient = 0.25;
+            var levelCoefficient = 0.25;
+            var timeFactor = 100 - (elapsedTimeInSeconds * timeCoefficient) < 0 ? 0 
+                : 100 - (elapsedTimeInSeconds * timeCoefficient);
+            var snakeLengthFactor = snake.BodyParts.Count * lengthCoefficient;
+            var levelFactor = level * levelCoefficient;
+            var newScore = timeFactor * snakeLengthFactor * levelFactor;
+            score += (int)newScore;
+            foodStartTime = DateTime.Now;
         }
     }
 }
