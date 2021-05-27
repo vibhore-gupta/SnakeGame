@@ -1,7 +1,9 @@
-﻿namespace SnakeGame.Source.GameOverStrategies.Interfaces
+﻿using System.Collections.Generic;
+
+namespace SnakeGame.Source.GameOverStrategies.Interfaces
 {
     public interface IGameOver
     {
-        bool IsOver(int headXCoordinate, int headYCoordinate);
+        bool IsOver(List<KeyValuePair<int, int>> coordinates);
     }
 }

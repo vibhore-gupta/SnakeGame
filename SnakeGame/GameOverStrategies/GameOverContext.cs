@@ -15,10 +15,10 @@ namespace SnakeGame.Source.GameOverStrategies
                 {3, new Level3Strategy() }
             };
         }
-        public bool IsOver(int level, int headXCoordinate, int headYCoordinate)
+        public bool IsOver(int level, List<KeyValuePair<int, int>> coordinates)
         {
             var strategy = levelToStrategy[level];
-            return strategy.IsOver(headXCoordinate, headYCoordinate);
+            return strategy.IsOver(coordinates);
         }
     }
 }

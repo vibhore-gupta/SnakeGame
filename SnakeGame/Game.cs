@@ -1,4 +1,5 @@
-﻿using SnakeGame.Source.FoodGenerationStrategies;
+﻿using SnakeGame.Source.Common;
+using SnakeGame.Source.FoodGenerationStrategies;
 using SnakeGame.Source.GameOverStrategies;
 using SnakeGame.Source.ObstacleLayoutStrategies;
 using System;
@@ -110,8 +111,7 @@ namespace SnakeGame.Source
                 }
                 DrawSnake();
                 CheckIfFoodEaten();
-                var headPixel = snake.GetPixelByBodyType(BodyPartType.HEAD);
-                if (gameOverContext.IsOver(level, headPixel.XCoordinate, headPixel.YCoordinate))
+                if (gameOverContext.IsOver(level, snake.GetSnakeCoordinates()))
                 {
                     DisplayGameOver();
                     break;
@@ -216,11 +216,11 @@ namespace SnakeGame.Source
 
         private static void PerformPostFoodEatingActivities()
         {
+            CalculateScore(DateTime.Now);
             EnlargeSnake();
             DecrementRemainingEatCounter();
             IncrementEatCounter();            
-            (foodX, foodY) = foodDrawContext.DrawFoodForLevel(level, snake.GetSnakeCoordinates());
-            CalculateScore();
+            (foodX, foodY) = foodDrawContext.DrawFoodForLevel(level, snake.GetSnakeCoordinates());            
             ChangeSleepTime();
             DisplayStatistics();            
         }
@@ -362,18 +362,9 @@ namespace SnakeGame.Source
             Console.WriteLine("Move Right: Right Arrow");
         }
 
-        private static void CalculateScore()
-        {
-            var elapsedTimeInSeconds = (DateTime.Now - foodStartTime).TotalSeconds;
-            var timeCoefficient = 0.5;
-            var lengthCoefficient = 0.25;
-            var levelCoefficient = 0.25;
-            var timeFactor = 100 - (elapsedTimeInSeconds * timeCoefficient) < 0 ? 0 
-                : 100 - (elapsedTimeInSeconds * timeCoefficient);
-            var snakeLengthFactor = snake.BodyParts.Count * lengthCoefficient;
-            var levelFactor = level * levelCoefficient;
-            var newScore = timeFactor * snakeLengthFactor * levelFactor;
-            score += (int)newScore;
+        private static void CalculateScore(DateTime foodEatingTime)
+        {            
+            score += ScoreCalculatorHelper.CalculateScore(foodEatingTime, foodStartTime, snake.BodyParts.Count, level);
             foodStartTime = DateTime.Now;
         }
     }
