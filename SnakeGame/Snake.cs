@@ -56,12 +56,12 @@ namespace SnakeGame.Source
             BodyParts.Insert(0, new BodyPart(BodyPartType.TAIL, newTail));
         }
 
-        private void SetDirection(Pixel pixel, ConsoleKey consoleKey)
+        private static void SetDirection(Pixel pixel, ConsoleKey consoleKey)
         {
             pixel.CurrentDirection = SnakeBuilderHelper.GetNewDirectionForHead(consoleKey);
         }
 
-        private void SetPixelCoordinates(Pixel pixel, int newXCoordinate, int newYCoordinate)
+        private static void SetPixelCoordinates(Pixel pixel, int newXCoordinate, int newYCoordinate)
         {
             pixel.XCoordinate = newXCoordinate;
             pixel.YCoordinate = newYCoordinate;

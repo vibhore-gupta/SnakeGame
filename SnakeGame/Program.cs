@@ -4,8 +4,9 @@
     {   
         static void Main()
         {
-            Game.Start();
-            Game.RestartLoop();
+            var game = new Game();
+            game.Start();
+            game.RestartLoop();
         }
     }
 }
