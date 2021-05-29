@@ -83,11 +83,11 @@ namespace SnakeGame.Source
             {
                 bodyPartsCount = 1;
             }
-            BodyParts.Add(new BodyPart(BodyPartType.TAIL, new Pixel(xCoordinate, yCoordinate, ConsoleColor.Green, Direction.RIGHT)));            
+            BodyParts.Add(new BodyPart(BodyPartType.TAIL, new Pixel(xCoordinate, yCoordinate, ConsoleColor.Yellow, Direction.RIGHT)));            
             for (var i = 0; i < bodyPartsCount; i++)
             {
                 xCoordinate += 1;
-                BodyParts.Add(new BodyPart(BodyPartType.BODY, new Pixel(xCoordinate, yCoordinate, ConsoleColor.Green, Direction.RIGHT)));
+                BodyParts.Add(new BodyPart(BodyPartType.BODY, new Pixel(xCoordinate, yCoordinate, ConsoleColor.Yellow, Direction.RIGHT)));
             }
             BodyParts.Add(new BodyPart(BodyPartType.HEAD, new Pixel(xCoordinate + 1, yCoordinate, ConsoleColor.DarkBlue, Direction.RIGHT)));
         }

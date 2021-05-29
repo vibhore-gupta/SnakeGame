@@ -137,6 +137,7 @@ namespace SnakeGame.Source
             Console.WriteLine("");
             Console.WriteLine("Please wait until new levels are added.");
             Console.WriteLine("Press Q to exit...");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         private static bool CheckIfAllLevelsDone()
@@ -206,6 +207,7 @@ namespace SnakeGame.Source
             Console.WriteLine("Press R to restart...");
             Console.WriteLine("Press Q to exit...");
             isOver = true;
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         private void CheckIfFoodEaten()

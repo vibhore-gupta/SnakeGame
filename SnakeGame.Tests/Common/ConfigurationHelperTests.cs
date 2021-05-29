@@ -8,8 +8,8 @@ namespace SnakeGame.Tests.Common
     public class ConfigurationHelperTests
     {
         [Theory]
-        [InlineData("level2ObstacleCoordinates")]
-        public void ConfigurationHelper_WhenPassedLevel2Section_ReturnsConfigValues(string sectionName)
+        [InlineData("level3ObstacleCoordinates")]
+        public void ConfigurationHelper_WhenPassedLevel3Section_ReturnsConfigValues(string sectionName)
         {
             //  Arrange
             var configValuesList = new List<KeyValuePair<int, int>>();
@@ -86,8 +86,8 @@ namespace SnakeGame.Tests.Common
         }
 
         [Theory]
-        [InlineData("level3ObstacleCoordinates")]
-        public void ConfigurationHelper_WhenPassedLevel3Section_ReturnsConfigValues(string sectionName)
+        [InlineData("level2ObstacleCoordinates")]
+        public void ConfigurationHelper_WhenPassedLevel2Section_ReturnsConfigValues(string sectionName)
         {
             //  Arrange
             var configValuesList = new List<KeyValuePair<int, int>>();
