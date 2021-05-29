@@ -16,6 +16,8 @@ namespace SnakeGame.Tests.Common
         [InlineData(-45, 6, 2, 20)]
         [InlineData(45, 6, 2, 0)]
         [InlineData(75, 6, 2, 0)]
+        [InlineData(100, 6, 2, 0)]
+        [InlineData(101, 6, 2, 0)]
         public void ScoreCalculatorHelper_WhenCalledCalculateScore_ReturnsNewScore(int elapsedSeconds, int bodyPartCount, int level, int expectedScore)
         {
             // Arrange

@@ -10,7 +10,7 @@ namespace SnakeGame.Source.Common
             var timeCoefficient = 0.5;
             var lengthCoefficient = 0.25;
             var levelCoefficient = 0.25;
-            var timeFactor = elapsedTimeInSeconds < 0 ? 0
+            var timeFactor = (elapsedTimeInSeconds >= 100 || elapsedTimeInSeconds < 0) ? 0
                 : (100 - elapsedTimeInSeconds) * timeCoefficient;
             var snakeLengthFactor = bodyPartCount * lengthCoefficient;
             var levelFactor = level * levelCoefficient;
