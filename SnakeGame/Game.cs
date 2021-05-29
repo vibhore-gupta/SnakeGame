@@ -163,7 +163,7 @@ namespace SnakeGame.Source
 
         private bool IsLevelCompleted()
         {
-            return remainingEatCounter == 5;
+            return remainingEatCounter == 0;
         }
 
         private void Restart()
