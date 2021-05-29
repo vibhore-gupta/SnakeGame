@@ -8,8 +8,8 @@ namespace SnakeGame.Tests
     {
         [Theory]
         [InlineData(BodyPartType.HEAD, Direction.RIGHT, 17, 16, ConsoleColor.DarkBlue)]
-        [InlineData(BodyPartType.TAIL, Direction.RIGHT, 15, 16, ConsoleColor.Green)]
-        [InlineData(BodyPartType.BODY, Direction.RIGHT, 16, 16, ConsoleColor.Green)]
+        [InlineData(BodyPartType.TAIL, Direction.RIGHT, 15, 16, ConsoleColor.Yellow)]
+        [InlineData(BodyPartType.BODY, Direction.RIGHT, 16, 16, ConsoleColor.Yellow)]
         public void Snake_GivenABodyPart_ReturnsBodyPixel(BodyPartType bodyPartType, Direction direction,
             int xCoordinate, int yCoordinate, ConsoleColor consoleColor)
         {
