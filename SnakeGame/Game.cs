@@ -186,6 +186,7 @@ namespace SnakeGame.Source
                 score = 0;
                 levelNumber = 1;
                 snake = new Snake(levelNumber);
+                GetNewLevelFromLevelContext();
                 totalEatCounter = 0;
             }
             remainingEatCounter = 10;
