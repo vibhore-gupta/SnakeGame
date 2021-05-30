@@ -91,8 +91,14 @@ namespace SnakeGame.Tests.Common
         {
             //  Arrange
             var configValuesList = new List<KeyValuePair<int, int>>();
-            var startingX = 6;
-            var startingY = 20;
+            var startingX = 20;
+            var startingY = 8;
+            for (var i = startingX; i <= 40; i += 2)
+            {
+                configValuesList.Add(new KeyValuePair<int, int>(i, startingY));
+            }
+            startingX = 6;
+            startingY = 20;
             for(var i = startingY; i > 5; i--)
             {
                 configValuesList.Add(new KeyValuePair<int, int>(startingX, i));

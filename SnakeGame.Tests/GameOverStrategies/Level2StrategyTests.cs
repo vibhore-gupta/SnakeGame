@@ -67,6 +67,17 @@ namespace SnakeGame.Tests.GameOverStrategies
         [InlineData(54, 19, true)]
         [InlineData(20, 28, false)]
         [InlineData(35, 16, false)]
+        [InlineData(20, 8, true)]
+        [InlineData(22, 8, true)]
+        [InlineData(24, 8, true)]
+        [InlineData(26, 8, true)]
+        [InlineData(28, 8, true)]
+        [InlineData(30, 8, true)]
+        [InlineData(32, 8, true)]
+        [InlineData(34, 8, true)]
+        [InlineData(36, 8, true)]
+        [InlineData(38, 8, true)]
+        [InlineData(40, 8, true)]
         public void Level2Strategy_WhenSnakeIsNotHittingWallsOrItselfButHittingObstacles_ReturnsIfGameIsOver(int headXCoordinate, int headYCoordinate,
             bool expectedResult)
         {
