@@ -4,7 +4,7 @@ using Xunit;
 
 namespace SnakeGame.Tests.GameOverStrategies
 {
-    public class GameOverStrategyBaseTests
+    public class Level2StrategyTests
     {
         [Theory]
         [InlineData(0, 15, true)]
@@ -20,17 +20,17 @@ namespace SnakeGame.Tests.GameOverStrategies
         [InlineData(59, 1, false)]
         [InlineData(1, 59, false)]
         [InlineData(59, 19, false)]
-        public void GameOverStrategyBase_WhenSnakeIsHittingTheWalls_ReturnsIfGameIsOver(int headXCoordinate, int headYCoordinate,
+        public void Level2Strategy_WhenSnakeIsHittingTheWalls_ReturnsIfGameIsOver(int headXCoordinate, int headYCoordinate,
             bool expectedResult)
         {
             // Arrange
-            var gameOverStrategyBase = new GameOverStrategyBase();
+            var level2Strategy = new Level2Strategy();
             var snake = new Snake(1);
             snake.BodyParts[^1].Pixel.XCoordinate = headXCoordinate;
             snake.BodyParts[^1].Pixel.YCoordinate = headYCoordinate;
 
             // Act
-            var actualResponse = gameOverStrategyBase.IsHittingTheWallsOrHittingItself(snake.GetSnakeCoordinates());
+            var actualResponse = level2Strategy.IsOver(snake.GetSnakeCoordinates());
 
             // Assert
             Assert.Equal(expectedResult, actualResponse);
@@ -40,17 +40,44 @@ namespace SnakeGame.Tests.GameOverStrategies
         [InlineData(15, 16, true)]
         [InlineData(16, 16, true)]
         [InlineData(18, 16, false)]
-        public void GameOverStrategyBase_WhenSnakeIsHittingItSelf_ReturnsIfGameIsOver(int headXCoordinate, int headYCoordinate,
+        public void Level2Strategy_WhenSnakeIsHittingItSelf_ReturnsIfGameIsOver(int headXCoordinate, int headYCoordinate,
             bool expectedResult)
         {
             // Arrange
-            var gameOverStrategyBase = new GameOverStrategyBase();
+            var level2Strategy = new Level2Strategy();
             var snake = new Snake(1);
             snake.BodyParts[^1].Pixel.XCoordinate = headXCoordinate;
             snake.BodyParts[^1].Pixel.YCoordinate = headYCoordinate;
 
             // Act
-            var actualResponse = gameOverStrategyBase.IsHittingTheWallsOrHittingItself(snake.GetSnakeCoordinates());
+            var actualResponse = level2Strategy.IsOver(snake.GetSnakeCoordinates());
+
+            // Assert
+            Assert.Equal(expectedResult, actualResponse);
+        }
+
+        [Theory]
+        [InlineData(6, 20, true)]
+        [InlineData(6, 19, true)]
+        [InlineData(16, 0, true)]
+        [InlineData(16, 1, true)]
+        [InlineData(44, 0, true)]
+        [InlineData(44, 1, true)]
+        [InlineData(54, 20, true)]
+        [InlineData(54, 19, true)]
+        [InlineData(20, 28, false)]
+        [InlineData(35, 16, false)]
+        public void Level2Strategy_WhenSnakeIsNotHittingWallsOrItselfButHittingObstacles_ReturnsIfGameIsOver(int headXCoordinate, int headYCoordinate,
+            bool expectedResult)
+        {
+            // Arrange
+            var level2Strategy = new Level2Strategy();
+            var snake = new Snake(1);
+            snake.BodyParts[^1].Pixel.XCoordinate = headXCoordinate;
+            snake.BodyParts[^1].Pixel.YCoordinate = headYCoordinate;
+
+            // Act
+            var actualResponse = level2Strategy.IsOver(snake.GetSnakeCoordinates());
 
             // Assert
             Assert.Equal(expectedResult, actualResponse);
@@ -61,17 +88,17 @@ namespace SnakeGame.Tests.GameOverStrategies
         [InlineData(50, 45, false)]
         [InlineData(15, 28, false)]
         [InlineData(53, 16, false)]
-        public void GameOverStrategyBase_WhenSnakeIsNeitherHittingWallsNorHittingItSelf_ReturnsIfGameIsOver(int headXCoordinate, int headYCoordinate,
+        public void Level2Strategy_WhenSnakeIsNeitherHittingWallsNorHittingItSelf_ReturnsIfGameIsOver(int headXCoordinate, int headYCoordinate,
             bool expectedResult)
         {
             // Arrange
-            var gameOverStrategyBase = new GameOverStrategyBase();
+            var level2Strategy = new Level2Strategy();
             var snake = new Snake(1);
             snake.BodyParts[^1].Pixel.XCoordinate = headXCoordinate;
             snake.BodyParts[^1].Pixel.YCoordinate = headYCoordinate;
 
             // Act
-            var actualResponse = gameOverStrategyBase.IsHittingTheWallsOrHittingItself(snake.GetSnakeCoordinates());
+            var actualResponse = level2Strategy.IsOver(snake.GetSnakeCoordinates());
 
             // Assert
             Assert.Equal(expectedResult, actualResponse);
