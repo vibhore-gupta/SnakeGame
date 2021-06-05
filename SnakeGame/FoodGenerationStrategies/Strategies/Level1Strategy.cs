@@ -1,7 +1,7 @@
 ﻿using SnakeGame.Source.FoodGenerationStrategies.Interfaces;
 using System.Collections.Generic;
 
-namespace SnakeGame.Source.FoodGenerationStrategies
+namespace SnakeGame.Source.FoodGenerationStrategies.Strategies
 {
     public class Level1Strategy : FoodDrawStrategyBase, IFoodDrawer
     {

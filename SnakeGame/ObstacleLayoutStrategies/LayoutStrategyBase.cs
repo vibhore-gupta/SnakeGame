@@ -1,30 +1,29 @@
-﻿using System;
+﻿using SnakeGame.Source.Common;
+using System;
 
 namespace SnakeGame.Source.ObstacleLayoutStrategies
 {
     public class LayoutStrategyBase
     {
-        private readonly int width = 30;
-        private readonly int height = 20;
-        protected readonly string hexUnicode = "\u25A0";
-
         public void DrawBoundary()
         {
-            DrawWidth(width);
+            Console.SetCursorPosition(0,0);
+            Console.ForegroundColor = ConsoleColor.Gray;
+            DrawWidth(Constants.width);
             DrawHeight();
-            DrawWidth(width + 1);
+            DrawWidth(Constants.width + 1);
             DrawHeight(true);
         }
 
         private void DrawHeight(bool setCursorPosition = false)
         {
-            for (var i = 0; i < height; i++)
+            for (var i = 0; i < Constants.height; i++)
             {
                 if (setCursorPosition)
                 {
-                    Console.SetCursorPosition(2 * width, i);
+                    Console.SetCursorPosition(2 * Constants.width, i);
                 }
-                Console.WriteLine(hexUnicode);
+                Console.WriteLine(Constants.hexUnicode);
             }
         }
 
@@ -32,7 +31,7 @@ namespace SnakeGame.Source.ObstacleLayoutStrategies
         {
             for (var i = 0; i < width; i++)
             {
-                Console.Write($"{hexUnicode} ");
+                Console.Write($"{Constants.hexUnicode} ");
             }
         }
     }

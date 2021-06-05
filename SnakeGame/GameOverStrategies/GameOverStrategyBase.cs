@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using SnakeGame.Source.Common;
+using System.Collections.Generic;
 
 namespace SnakeGame.Source.GameOverStrategies
 {
     public class GameOverStrategyBase
     {
-        private static readonly int width = 30;
-        private static readonly int height = 20;
-
         public bool IsHittingTheWallsOrHittingItself(List<KeyValuePair<int, int>> coordinates)
         {
             return IsHittingTheWalls(coordinates)
@@ -16,12 +14,12 @@ namespace SnakeGame.Source.GameOverStrategies
         {
             var headXCoordinate = coordinates[^1].Key;
             var headYCoordinate = coordinates[^1].Value;
-            var twiceWidth = 2 * width;
-            var isYCoordinateWithinHeight = headYCoordinate >= 0 && headYCoordinate <= height;
+            var twiceWidth = 2 * Constants.width;
+            var isYCoordinateWithinHeight = headYCoordinate >= 0 && headYCoordinate <= Constants.height;
             var isXCoordinateWithinWidth = headXCoordinate >= 0 && headXCoordinate <= twiceWidth;
 
             return headXCoordinate == 0 && isYCoordinateWithinHeight // left wall hit
-                || headYCoordinate == height && isXCoordinateWithinWidth // bottom wall hit
+                || headYCoordinate == Constants.height && isXCoordinateWithinWidth // bottom wall hit
                 || headXCoordinate == twiceWidth && isYCoordinateWithinHeight // right wall hit
                 || headYCoordinate == 0 && isXCoordinateWithinWidth; // top wall hit
         }

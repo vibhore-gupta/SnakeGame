@@ -1,4 +1,5 @@
 ﻿using SnakeGame.Source.Common;
+using SnakeGame.Source.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,31 @@ namespace SnakeGame.Source
             yCoordinate = 16;
             BodyParts = new List<BodyPart>();
             Generate(bodyPartCount);
+        }
+
+        public Snake(List<Pixel> pixels)
+        {
+            xCoordinate = 15;
+            yCoordinate = 16;
+            BodyParts = new List<BodyPart>();
+            GenerateFromCoordinates(pixels);
+        }
+
+        private void GenerateFromCoordinates(List<Pixel> pixels)
+        {
+            if (pixels.Count == 0)
+            {
+                Generate(1);
+                return;
+            }
+            for (var i = 0; i < pixels.Count; i++)
+            {
+                var pixel = pixels[i];
+                BodyParts.Add(new BodyPart(BodyPartType.BODY, new Pixel(pixel.XCoordinate, pixel.YCoordinate,
+                    pixel.ConsoleColor, pixel.CurrentDirection)));
+            }
+            BodyParts[^1].PartType = BodyPartType.HEAD;
+            BodyParts[0].PartType = BodyPartType.TAIL;
         }
 
         public void ReBuildTailAndBody()
@@ -61,6 +87,21 @@ namespace SnakeGame.Source
             pixel.CurrentDirection = SnakeBuilderHelper.GetNewDirectionForHead(consoleKey);
         }
 
+        public void Reposition()
+        {
+            var snakeBodyParts = BodyParts;
+            for (var i = 0; i < snakeBodyParts.Count; i++)
+            {
+                var xCoordinate = snakeBodyParts[i].Pixel.XCoordinate;
+                var yCoordinate = snakeBodyParts[i].Pixel.YCoordinate;
+                Console.SetCursorPosition(xCoordinate, yCoordinate);
+                Console.Write(" ");
+                snakeBodyParts[i].Pixel.XCoordinate = i + 15;
+                snakeBodyParts[i].Pixel.YCoordinate = 16;
+                snakeBodyParts[i].Pixel.CurrentDirection = Direction.RIGHT;
+            }
+        }
+
         private static void SetPixelCoordinates(Pixel pixel, int newXCoordinate, int newYCoordinate)
         {
             pixel.XCoordinate = newXCoordinate;
@@ -89,7 +130,7 @@ namespace SnakeGame.Source
                 xCoordinate += 1;
                 BodyParts.Add(new BodyPart(BodyPartType.BODY, new Pixel(xCoordinate, yCoordinate, ConsoleColor.Yellow, Direction.RIGHT)));
             }
-            BodyParts.Add(new BodyPart(BodyPartType.HEAD, new Pixel(xCoordinate + 1, yCoordinate, ConsoleColor.DarkBlue, Direction.RIGHT)));
+            BodyParts.Add(new BodyPart(BodyPartType.HEAD, new Pixel(xCoordinate + 1, yCoordinate, ConsoleColor.Green, Direction.RIGHT)));
         }
     }
     public class BodyPart

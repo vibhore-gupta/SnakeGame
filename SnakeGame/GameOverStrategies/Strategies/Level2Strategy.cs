@@ -3,7 +3,7 @@ using SnakeGame.Source.Common;
 using SnakeGame.Source.GameOverStrategies.Interfaces;
 using System.Collections.Generic;
 
-namespace SnakeGame.Source.GameOverStrategies
+namespace SnakeGame.Source.GameOverStrategies.Strategies
 {
     public class Level2Strategy : GameOverStrategyBase, IGameOver
     {

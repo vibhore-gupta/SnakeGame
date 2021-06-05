@@ -1,5 +1,5 @@
 ﻿using SnakeGame.Source;
-using SnakeGame.Source.GameOverStrategies;
+using SnakeGame.Source.GameOverStrategies.Strategies;
 using Xunit;
 
 namespace SnakeGame.Tests.GameOverStrategies

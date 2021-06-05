@@ -3,9 +3,9 @@ using SnakeGame.Source.Common;
 using SnakeGame.Source.ObstacleLayoutStrategies.Interfaces;
 using System;
 
-namespace SnakeGame.Source.ObstacleLayoutStrategies
+namespace SnakeGame.Source.ObstacleLayoutStrategies.Strategies
 {
-    public class Level2Strategy : LayoutStrategyBase, ILayoutDrawer
+    public class Level3Strategy : LayoutStrategyBase, ILayoutDrawer
     {
         public void Draw()
         {
@@ -15,15 +15,14 @@ namespace SnakeGame.Source.ObstacleLayoutStrategies
 
         private void SetObstacles()
         {
-            var section = ConfigurationHelper.GetSection("level2ObstacleCoordinates");
+            var section = ConfigurationHelper.GetSection("level3ObstacleCoordinates");
             foreach (var subSection in section.GetChildren())
             {
                 var xCoordinate = subSection.GetValue<int>("x");
                 var yCoordinate = subSection.GetValue<int>("y");
                 Console.SetCursorPosition(xCoordinate, yCoordinate);
-                Console.Write(hexUnicode);
+                Console.Write(Constants.hexUnicode);
             }
         }
-
     }
 }

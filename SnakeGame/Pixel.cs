@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SnakeGame.Source.Enums;
+using System;
 
 namespace SnakeGame.Source
 {
@@ -6,7 +7,7 @@ namespace SnakeGame.Source
     {
         public int XCoordinate { get; set; }
         public int YCoordinate { get; set; }
-        public ConsoleColor ConsoleColor { get; }
+        public ConsoleColor ConsoleColor { get; set; }
         public Direction CurrentDirection { get; set; }
         public Pixel(int xCoordinate, int yCoordinate, ConsoleColor consoleColor, Direction currentDirection)
         {

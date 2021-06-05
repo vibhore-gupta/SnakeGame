@@ -1,34 +1,34 @@
-﻿using SnakeGame.Source.Levels.Interfaces;
+﻿using SnakeGame.Source.Contexts;
+using SnakeGame.Source.Levels.Interfaces;
+using SnakeGame.Source.Levels.Stages;
 using System.Collections.Generic;
 
 namespace SnakeGame.Source.Levels
 {
-    public class LevelContext
+    public class LevelContext : Context<ILevel>
     {
-        private readonly Dictionary<int, ILevel> levelMappings;
-
         public LevelContext()
         {
-            levelMappings = new Dictionary<int, ILevel>
+            Mappings = new Dictionary<int, ILevel>
             {
-                {1, new Level1(new FoodGenerationStrategies.Level1Strategy(),
-                               new ObstacleLayoutStrategies.Level1Strategy(),
-                               new GameOverStrategies.Level1Strategy())                                     
+                {1, new Level1(new FoodGenerationStrategies.Strategies.Level1Strategy(),
+                               new ObstacleLayoutStrategies.Strategies.Level1Strategy(),
+                               new GameOverStrategies.Strategies.Level1Strategy())                                     
                 },
-                {2, new Level2(new FoodGenerationStrategies.Level2Strategy(),
-                               new ObstacleLayoutStrategies.Level2Strategy(),
-                               new GameOverStrategies.Level2Strategy())                                     
+                {2, new Level2(new FoodGenerationStrategies.Strategies.Level2Strategy(),
+                               new ObstacleLayoutStrategies.Strategies.Level2Strategy(),
+                               new GameOverStrategies.Strategies.Level2Strategy())                                     
                 },
-                {3, new Level3(new FoodGenerationStrategies.Level3Strategy(),
-                               new ObstacleLayoutStrategies.Level3Strategy(),
-                               new GameOverStrategies.Level3Strategy())                                  
+                {3, new Level3(new FoodGenerationStrategies.Strategies.Level3Strategy(),
+                               new ObstacleLayoutStrategies.Strategies.Level3Strategy(),
+                               new GameOverStrategies.Strategies.Level3Strategy())                                  
                 }
             };
         }
 
-        public ILevel Get(int level)
+        public override ILevel Get(int level)
         {
-            return levelMappings[level];
+            return Mappings[level];
         }
     }
 }

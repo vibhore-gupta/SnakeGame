@@ -1,5 +1,7 @@
 ﻿using SnakeGame.Source;
+using SnakeGame.Source.Enums;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace SnakeGame.Tests
@@ -7,7 +9,7 @@ namespace SnakeGame.Tests
     public class SnakeTests
     {
         [Theory]
-        [InlineData(BodyPartType.HEAD, Direction.RIGHT, 17, 16, ConsoleColor.DarkBlue)]
+        [InlineData(BodyPartType.HEAD, Direction.RIGHT, 17, 16, ConsoleColor.Green)]
         [InlineData(BodyPartType.TAIL, Direction.RIGHT, 15, 16, ConsoleColor.Yellow)]
         [InlineData(BodyPartType.BODY, Direction.RIGHT, 16, 16, ConsoleColor.Yellow)]
         public void Snake_GivenABodyPart_ReturnsBodyPixel(BodyPartType bodyPartType, Direction direction,
@@ -108,10 +110,10 @@ namespace SnakeGame.Tests
         }
 
         [Theory]
-        [InlineData(ConsoleKey.RightArrow, Direction.RIGHT, 18, 16, ConsoleColor.DarkBlue)]
-        [InlineData(ConsoleKey.LeftArrow, Direction.LEFT, 16, 16, ConsoleColor.DarkBlue)]
-        [InlineData(ConsoleKey.UpArrow, Direction.UP, 17, 15, ConsoleColor.DarkBlue)]
-        [InlineData(ConsoleKey.DownArrow, Direction.DOWN, 17, 17, ConsoleColor.DarkBlue)]
+        [InlineData(ConsoleKey.RightArrow, Direction.RIGHT, 18, 16, ConsoleColor.Green)]
+        [InlineData(ConsoleKey.LeftArrow, Direction.LEFT, 16, 16, ConsoleColor.Green)]
+        [InlineData(ConsoleKey.UpArrow, Direction.UP, 17, 15, ConsoleColor.Green)]
+        [InlineData(ConsoleKey.DownArrow, Direction.DOWN, 17, 17, ConsoleColor.Green)]
         public void Snake_WhenCalledReBuildHeadAccordingToKey_ChangesHeadCoordinates(ConsoleKey key, Direction direction,
             int xCoordinate, int yCoordinate, ConsoleColor consoleColor)
         {
@@ -172,6 +174,84 @@ namespace SnakeGame.Tests
             Assert.Equal(snakeLength, snake.BodyParts.Count);
             Assert.Equal(BodyPartType.TAIL, snake.BodyParts[0].PartType);
             Assert.Equal(BodyPartType.HEAD, snake.BodyParts[snakeLength-1].PartType);
+        }
+
+        [Fact]
+        public void Snake_WhenInstanciatedWithListOfZeroPixels_CreatesSnake()
+        {
+            // Arrange
+            var snake = new Snake(new List<Pixel> ());
+
+            // Act
+
+            // Assert
+            Assert.Equal(3, snake.BodyParts.Count);
+            Assert.Equal(BodyPartType.TAIL, snake.BodyParts[0].PartType);
+            Assert.Equal(15, snake.BodyParts[0].Pixel.XCoordinate);
+            Assert.Equal(16, snake.BodyParts[0].Pixel.YCoordinate);
+            Assert.Equal(Direction.RIGHT, snake.BodyParts[0].Pixel.CurrentDirection);
+            Assert.Equal(ConsoleColor.Yellow, snake.BodyParts[0].Pixel.ConsoleColor);
+
+            Assert.Equal(16, snake.BodyParts[1].Pixel.XCoordinate);
+            Assert.Equal(16, snake.BodyParts[1].Pixel.YCoordinate);
+            Assert.Equal(Direction.RIGHT, snake.BodyParts[1].Pixel.CurrentDirection);
+            Assert.Equal(ConsoleColor.Yellow, snake.BodyParts[1].Pixel.ConsoleColor);
+
+            Assert.Equal(17, snake.BodyParts[^1].Pixel.XCoordinate);
+            Assert.Equal(16, snake.BodyParts[^1].Pixel.YCoordinate);
+            Assert.Equal(Direction.RIGHT, snake.BodyParts[^1].Pixel.CurrentDirection);
+            Assert.Equal(ConsoleColor.Green, snake.BodyParts[^1].Pixel.ConsoleColor);
+            Assert.Equal(BodyPartType.HEAD, snake.BodyParts[^1].PartType);
+            Assert.Equal(BodyPartType.BODY, snake.BodyParts[1].PartType);
+        }
+
+        [Fact]
+        public void Snake_WhenInstanciatedWithListOfPixels_CreatesSnake()
+        {
+            // Arrange
+            var snake = new Snake(new List<Pixel> 
+            { new Pixel(0, 1, ConsoleColor.Red, Direction.RIGHT ),
+            new Pixel(2, 3, ConsoleColor.Yellow, Direction.LEFT ),
+            new Pixel(3, 4, ConsoleColor.Green, Direction.UP ),
+            new Pixel(4, 5, ConsoleColor.Black, Direction.DOWN ),
+            new Pixel(4, 6, ConsoleColor.Blue, Direction.RIGHT )}
+            );
+
+            // Act
+
+            // Assert
+            Assert.Equal(5, snake.BodyParts.Count);
+
+            Assert.Equal(0, snake.BodyParts[0].Pixel.XCoordinate);
+            Assert.Equal(1, snake.BodyParts[0].Pixel.YCoordinate);
+            Assert.Equal(Direction.RIGHT, snake.BodyParts[0].Pixel.CurrentDirection);
+            Assert.Equal(ConsoleColor.Red, snake.BodyParts[0].Pixel.ConsoleColor);
+
+            Assert.Equal(2, snake.BodyParts[1].Pixel.XCoordinate);
+            Assert.Equal(3, snake.BodyParts[1].Pixel.YCoordinate);
+            Assert.Equal(Direction.LEFT, snake.BodyParts[1].Pixel.CurrentDirection);
+            Assert.Equal(ConsoleColor.Yellow, snake.BodyParts[1].Pixel.ConsoleColor);
+
+            Assert.Equal(3, snake.BodyParts[2].Pixel.XCoordinate);
+            Assert.Equal(4, snake.BodyParts[2].Pixel.YCoordinate);
+            Assert.Equal(Direction.UP, snake.BodyParts[2].Pixel.CurrentDirection);
+            Assert.Equal(ConsoleColor.Green, snake.BodyParts[2].Pixel.ConsoleColor);
+
+            Assert.Equal(4, snake.BodyParts[3].Pixel.XCoordinate);
+            Assert.Equal(5, snake.BodyParts[3].Pixel.YCoordinate);
+            Assert.Equal(Direction.DOWN, snake.BodyParts[3].Pixel.CurrentDirection);
+            Assert.Equal(ConsoleColor.Black, snake.BodyParts[3].Pixel.ConsoleColor);
+
+            Assert.Equal(4, snake.BodyParts[4].Pixel.XCoordinate);
+            Assert.Equal(6, snake.BodyParts[4].Pixel.YCoordinate);
+            Assert.Equal(Direction.RIGHT, snake.BodyParts[4].Pixel.CurrentDirection);
+            Assert.Equal(ConsoleColor.Blue, snake.BodyParts[4].Pixel.ConsoleColor);
+
+            Assert.Equal(BodyPartType.TAIL, snake.BodyParts[0].PartType);
+            Assert.Equal(BodyPartType.HEAD, snake.BodyParts[^1].PartType);
+            Assert.Equal(BodyPartType.BODY, snake.BodyParts[1].PartType);
+            Assert.Equal(BodyPartType.BODY, snake.BodyParts[2].PartType);
+            Assert.Equal(BodyPartType.BODY, snake.BodyParts[3].PartType);
         }
     }
 }

@@ -4,7 +4,7 @@ using SnakeGame.Source.Levels.Interfaces;
 using SnakeGame.Source.ObstacleLayoutStrategies.Interfaces;
 using System.Collections.Generic;
 
-namespace SnakeGame.Source.Levels
+namespace SnakeGame.Source.Levels.Stages
 {
     public class Level2 : LevelBase, ILevel
     {

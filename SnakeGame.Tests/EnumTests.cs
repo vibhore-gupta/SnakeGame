@@ -1,4 +1,4 @@
-﻿using SnakeGame.Source;
+﻿using SnakeGame.Source.Enums;
 using Xunit;
 
 namespace SnakeGame.Tests
@@ -26,6 +26,21 @@ namespace SnakeGame.Tests
         [InlineData(BodyPartType.TAIL, 2)]
         [InlineData(BodyPartType.HEAD, 0)]
         public void BodyPartEnum_TestForValues(BodyPartType bodyPartType, int number)
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+            Assert.Equal(number, (int)bodyPartType);
+        }
+
+        [Theory]
+        [InlineData(PrizeType.DEAD, 3)]
+        [InlineData(PrizeType.LIFEBOOSTER, 1)]
+        [InlineData(PrizeType.NONE, 0)]
+        [InlineData(PrizeType.SCOREBOOSTER, 2)]
+        public void PrizeTypeEnum_TestForValues(PrizeType bodyPartType, int number)
         {
             // Arrange
 

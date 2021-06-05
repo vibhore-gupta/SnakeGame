@@ -1,4 +1,4 @@
-﻿namespace SnakeGame.Source
+﻿namespace SnakeGame.Source.Enums
 {
     public enum BodyPartType
     {

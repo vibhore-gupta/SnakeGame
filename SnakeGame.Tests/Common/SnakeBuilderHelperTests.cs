@@ -1,5 +1,6 @@
 ﻿using SnakeGame.Source;
 using SnakeGame.Source.Common;
+using SnakeGame.Source.Enums;
 using System;
 using Xunit;
 

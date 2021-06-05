@@ -1,7 +1,11 @@
-﻿using SnakeGame.Source.Common;
+﻿using SnakeGame.Source.BonusRounds;
+using SnakeGame.Source.BonusRounds.Interfaces;
+using SnakeGame.Source.Common;
+using SnakeGame.Source.Enums;
 using SnakeGame.Source.Levels;
 using SnakeGame.Source.Levels.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
@@ -12,20 +16,23 @@ namespace SnakeGame.Source
         private int score;
         private int remainingEatCounter = 10;
         private int totalEatCounter;
-        private int sleepTime = 500;
+        private int sleepTime = 400;
         private bool isCurrentLevelCompleted;
         private DateTime foodStartTime = DateTime.Now;
         private ILevel level;
+        private IBonusRound bonusRound;
         private int foodX;
         private int foodY;
         private bool isOver;
         private Snake snake;
+        private int levelNumber = 1;
+        private bool isBonusRound;
+        private bool restartRound;
+        private int lives;
 
-        private static int levelNumber = 1;
         private static readonly LevelContext levelContext = new LevelContext();
-        private static readonly int height = 20;
+        private static readonly BonusContext bonusContext = new BonusContext();
         private static readonly int totalLevels = 3;
-        private static readonly string hexUnicode = "\u25A0";
         private static readonly ConsoleKey[] AllowedKeys = new ConsoleKey[]
         {
             ConsoleKey.UpArrow,
@@ -33,9 +40,6 @@ namespace SnakeGame.Source
             ConsoleKey.LeftArrow,
             ConsoleKey.RightArrow
         };
-        private static readonly ConsoleKey quitKey = ConsoleKey.Q;
-        private static readonly ConsoleKey restartKey = ConsoleKey.R;
-        private static readonly ConsoleKey levelUpgradeKey = ConsoleKey.L;
 
         public Game()
         {
@@ -50,19 +54,135 @@ namespace SnakeGame.Source
                 if (Console.KeyAvailable)
                 {
                     var key = Console.ReadKey(true).Key;
-                    if (key == quitKey)
+                    if (key == ConsoleKey.Q)
                     {
                         End();
                     }
-                    else if(key == restartKey)
+                    else if(key == ConsoleKey.R)
                     {
                         Restart();
                     }
-                    else if(key == levelUpgradeKey)
+                    else if(key == ConsoleKey.L && !isBonusRound)
                     {
                         Upgrade();
                     }
+                    else if (key == ConsoleKey.B)
+                    {
+                        DisplayBonusRoundInstructions();
+                    }
+                    else if (key == ConsoleKey.S)
+                    {
+                        StartBonusRound();
+                    }
+                    else if (key == ConsoleKey.C)
+                    {
+                        RestartRound();
+                    }
                 }
+            }
+        }
+
+        private void RestartRound()
+        {
+            if (restartRound)
+            {
+                ClearConsoleByCoordinates(new List<KeyValuePair<int, int>>
+                {
+                    new KeyValuePair<int, int>(0, Constants.height + 1),
+                    new KeyValuePair<int, int>(0, Constants.height + 2)
+                }, 100);
+                
+                snake.Reposition();
+                level.Drawlayout();
+                DisplayStatisticsAndGameControls();
+                restartRound = false;
+                GameLoop();
+            }            
+        }
+
+        private void StartBonusRound()
+        {            
+            if (isBonusRound)
+            {
+                ClearConsole();
+                DisplayStatisticsAndGameControls();
+                bonusRound.DrawBonusRoundLayout();
+                bonusRound.SetPrizesBehindDoors(new Dictionary<PrizeType, int> { { PrizeType.LIFEBOOSTER, 1 } });
+                snake = new Snake(1);
+                DrawSnake(snake);
+                while (true)
+                {
+                    ClearTail();
+                    if (Console.KeyAvailable)
+                    {
+                        var key = Console.ReadKey(true).Key;
+                        if (AllowedKeys.Contains(key))
+                        {
+                            RebuildSnake(key);
+                        }
+                        else
+                        {
+                            RebuildSnake();
+                        }
+                    }
+                    else
+                    {
+                        RebuildSnake();
+                    }
+                    DrawSnake(snake);
+                    var headX = snake.GetPixelByBodyType(BodyPartType.HEAD).XCoordinate;
+                    var headY = snake.GetPixelByBodyType(BodyPartType.HEAD).YCoordinate;
+                    var prize = bonusRound.GetPrizeWon(new KeyValuePair<int, int>(headX, headY));
+                    if (prize != PrizeType.NONE)
+                    {
+                        ApplyPrizeBooster(prize);
+                        DisplayPrize(prize);                        
+                        isBonusRound = false;
+                        break;
+                    }
+                    Thread.Sleep(400);
+                }
+            }
+        }
+
+        private void ApplyPrizeBooster(PrizeType prize)
+        {
+            switch (prize)
+            {
+                case PrizeType.LIFEBOOSTER:
+                    lives++;
+                    break;
+                case PrizeType.SCOREBOOSTER:
+                    score += 100;
+                    break;
+            }
+        }
+
+        private void DisplayPrize(PrizeType prize)
+        {
+            var label = "Hard Luck!!! You won nothing this time. Keep up the spirits.\nYou are doing very well. Better luck next time.";
+            switch (prize)
+            {
+                case PrizeType.LIFEBOOSTER:
+                    label = "Yay!!! You are rewarded with one extra life for the snake.\nMake sure you make it count.";
+                    break;
+                case PrizeType.SCOREBOOSTER:
+                    label = "Yay!!! You are rewarded with an extra score of 100.\nYou are on your way to become the undisputed champion.";
+                    break;
+            }
+            DisplayText(0, Constants.height + 1, label);
+            Console.WriteLine("");
+            Console.WriteLine("Press L to start next level...");
+        }
+
+        private void DisplayBonusRoundInstructions()
+        {
+            if (isBonusRound)
+            {
+                ClearConsole();
+                SetForeGroundColor(ConsoleColor.Gray);
+                bonusRound.ShowBonusRoundInstructions();
+                DisplayStatisticsAndGameControls();
             }
         }
 
@@ -85,6 +205,16 @@ namespace SnakeGame.Source
         {
             while (true)
             {
+                //if (false)
+                //{
+                //    if (IsSnakeApproaching())
+                //    {
+                //        Console.SetCursorPosition(foodX, foodY);
+                //        Console.Write(" ");
+                //        (foodX, foodY) = GetNewFoodCoordinates();
+                //        RedrawFood();
+                //    }
+                //}
                 if (IsLevelCompleted())
                 {
                     if (CheckIfAllLevelsDone())
@@ -92,10 +222,11 @@ namespace SnakeGame.Source
                         DisplayChampionText();
                         break;
                     }
+                    SetAndCheckBonusRound();
                     DisplayLevelCompleted();
                     MarkCurrentLevelCompleted();
                     IncrementLevel();
-                    GetNewLevelFromLevelContext();
+                    GetNewLevelFromLevelContext();                                     
                     break;
                 }
                 ClearTail();
@@ -115,14 +246,52 @@ namespace SnakeGame.Source
                 {
                     RebuildSnake();
                 }
-                DrawSnake();
+                DrawSnake(snake);
                 CheckIfFoodEaten();
                 if (level.IsGameOver(snake.GetSnakeCoordinates()))
                 {
+                    lives--;
                     DisplayGameOver();
                     break;
                 }
                 Thread.Sleep(sleepTime);
+            }
+        }
+
+        private void RedrawFood()
+        {
+            Console.SetCursorPosition(foodX, foodY);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(Constants.hexUnicode);
+        }
+
+        //private (int foodX, int foodY) GetNewFoodCoordinates()
+        //{
+        //    var headPixel = snake.GetPixelByBodyType(BodyPartType.HEAD);
+        //    return SnakeBuilderHelper.ReDraw(snake.GetSnakeCoordinates(), headPixel.CurrentDirection, foodX, foodY);
+        //}
+
+        private bool IsSnakeApproaching()
+        {
+            var headX = snake.BodyParts[^1].Pixel.XCoordinate;
+            var headY = snake.BodyParts[^1].Pixel.YCoordinate;
+
+            return (foodX - headX >= 0 && foodX - headX <= 3 && foodY - headY >= 0 && foodY - headY <= 1)
+                || (foodX - headX >= 0 && foodX - headX <= 3 && headY - foodY >= 0 && headY - foodY <= 1) // left side approach
+                || (foodY - headY >= 0 && foodY - headY <= 1 && foodX - headX >= 0 && foodX - headX <= 3)
+                || (foodY - headY >= 0 && foodY - headY <= 1 && headX - foodX >= 0 && headX - foodX <= 3) // top side approach
+                || (headX - foodX >= 0 && headX - foodX <= 3 && foodY - headY >= 0 && foodY - headY <= 1)
+                || (headX - foodX >= 0 && headX - foodX <= 3 && headY - foodY >= 0 && headY - foodY <= 1) // right side approach
+                || (headY - foodY >= 0 && headY - foodY <= 1 && foodX - headX >= 0 && foodX - headX <= 3)
+                || (headY - foodY >= 0 && headY - foodY <= 1 && headX - foodX >= 0 && headX - foodX <= 3); // bottom side approach
+        }
+
+        private void SetAndCheckBonusRound()
+        {
+            isBonusRound = levelNumber % 2 == 0;
+            if (isBonusRound)
+            {
+                bonusRound = bonusContext.Get(levelNumber + 1);
             }
         }
 
@@ -133,19 +302,19 @@ namespace SnakeGame.Source
 
         private static void DisplayChampionText()
         {
-            DisplayText(0, height + 1, "You are a champion now.");
+            DisplayText(0, Constants.height + 1, "You are a champion now.");
             Console.WriteLine("");
             Console.WriteLine("Please wait until new levels are added.");
             Console.WriteLine("Press Q to exit...");
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        private static bool CheckIfAllLevelsDone()
+        private bool CheckIfAllLevelsDone()
         {
             return levelNumber == totalLevels;
         }
 
-        private static void IncrementLevel()
+        private void IncrementLevel()
         {
             levelNumber += 1;
         }
@@ -157,9 +326,16 @@ namespace SnakeGame.Source
 
         private void DisplayLevelCompleted()
         {
-            DisplayText(0, height + 1, $"Congrats Level-{levelNumber} completed...");
+            DisplayText(0, Constants.height + 1, $"Congrats Level-{levelNumber} completed...");
             Console.WriteLine("");
-            Console.WriteLine("Press L to start next level...");
+            if (isBonusRound)
+            {
+                Console.WriteLine("Hurray!!! Next up is Bonus round. Press B to continue...");
+            }
+            else
+            {
+                Console.WriteLine("Press L to start next level...");
+            }            
         }
 
         private bool IsLevelCompleted()
@@ -189,9 +365,10 @@ namespace SnakeGame.Source
                 snake = new Snake(levelNumber);
                 GetNewLevelFromLevelContext();
                 totalEatCounter = 0;
+                lives = 0;
             }
             remainingEatCounter = 10;
-            sleepTime = 500;
+            sleepTime = 400;
             isCurrentLevelCompleted = false;
         }
 
@@ -200,14 +377,35 @@ namespace SnakeGame.Source
             Environment.Exit(0);
         }
 
+        private static void ClearConsoleByCoordinates(List<KeyValuePair<int, int>> keyValuePairs, int endingX)
+        {
+            for(var i =0;i< keyValuePairs.Count; i++)
+            {
+                Console.SetCursorPosition(keyValuePairs[i].Key, keyValuePairs[i].Value);
+                for (var j = 0; j < endingX; j++)
+                {
+                    Console.Write(" ");
+                }
+            }            
+        }
+
         private void DisplayGameOver()
         {
-            DisplayText(0, height + 1, "Game Over!!!");
-            Console.WriteLine("");
-            Console.WriteLine("Press R to restart...");
-            Console.WriteLine("Press Q to exit...");
-            isOver = true;
-            Console.ForegroundColor = ConsoleColor.White;
+            if(lives >= 0)
+            {
+                restartRound = true;
+                DisplayText(0, Constants.height + 1, $"Now, you have only {lives} live(s) left. Stay tight.\n");
+                Console.WriteLine("Press C to continue...");
+            }
+            else
+            {
+                DisplayText(0, Constants.height + 1, "Game Over!!!");
+                Console.WriteLine("");
+                Console.WriteLine("Press R to restart...");
+                Console.WriteLine("Press Q to exit...");
+                isOver = true;
+                Console.ForegroundColor = ConsoleColor.White;
+            }            
         }
 
         private void CheckIfFoodEaten()
@@ -230,7 +428,7 @@ namespace SnakeGame.Source
             CalculateScore(DateTime.Now);
             EnlargeSnake();
             DecrementRemainingEatCounter();
-            IncrementEatCounter();            
+            IncrementEatCounter();
             (foodX, foodY) = level.GenerateFood(snake.GetSnakeCoordinates());            
             ChangeSleepTime();
             DisplayStatisticsAndGameControls();            
@@ -243,7 +441,7 @@ namespace SnakeGame.Source
 
         private void ChangeSleepTime()
         {
-            sleepTime -= 40;
+            sleepTime -= 30;
         }
 
         private void IncrementEatCounter()
@@ -266,16 +464,16 @@ namespace SnakeGame.Source
         private void SetUp()
         {
             ClearConsole();
-            SetForeGroundColor();
+            SetForeGroundColor(ConsoleColor.Gray);
             level.Drawlayout();
-            DrawSnake();
+            DrawSnake(snake);
             (foodX, foodY) = level.GenerateFood(snake.GetSnakeCoordinates());
             DisplayStatisticsAndGameControls();
         }
 
-        private static void SetForeGroundColor()
+        private static void SetForeGroundColor(ConsoleColor color)
         {
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = color;
         }
 
         private static void ClearConsole()
@@ -283,7 +481,7 @@ namespace SnakeGame.Source
             Console.Clear();
         }
 
-        private void DrawSnake()
+        private void DrawSnake(Snake snake)
         {
             var snakeBodyParts = snake.BodyParts;
             for (var i = 0; i < snakeBodyParts.Count; i++)
@@ -291,7 +489,7 @@ namespace SnakeGame.Source
                 var snakePart = snakeBodyParts[i].Pixel;
                 Console.SetCursorPosition(snakePart.XCoordinate, snakePart.YCoordinate);
                 Console.ForegroundColor = snakePart.ConsoleColor;
-                Console.Write(hexUnicode);
+                Console.Write(Constants.hexUnicode);
             }
             Console.CursorVisible = false;
         }
@@ -309,21 +507,30 @@ namespace SnakeGame.Source
 
         private void DisplayStatisticsAndGameControls()
         {
+            var snake = new Snake(new List<Pixel>
+            {
+                new Pixel(76, 3, ConsoleColor.Yellow, Direction.RIGHT),
+                new Pixel(77, 3, ConsoleColor.Yellow, Direction.RIGHT),
+                new Pixel(78, 3, ConsoleColor.Green, Direction.RIGHT),
+            });
             Console.SetCursorPosition(65, 0);
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("Game Statistics:");
-            DisplayText(66, 1, $"Level: {levelNumber} of {totalLevels}");
+            var levelText = isBonusRound ? "Bonus Round" : $"{levelNumber } of {totalLevels}";
+            DisplayText(66, 1, $"Level: {levelText}");
             DisplayText(66, 2, $"Score: {score}");
-            DisplayText(66, 3, $"Total Fruits Eaten: {totalEatCounter}");
+            DisplayText(66, 3, $"Life: {lives} *");
+            DrawSnake(snake);
+            DisplayText(66, 4, $"Total Fruits Eaten: {totalEatCounter}");
             var label = remainingEatCounter == 10 ? $"{remainingEatCounter}" : $"0{remainingEatCounter}";
-            DisplayText(66, 4, $"Fruits left at this level: {label}");
+            DisplayText(66, 5, $"Fruits left at this level: {label}");
             label = $"{Math.Round(1000.0M / sleepTime, 1)} blocks/sec";
-            DisplayText(66, 5, $"Speed: {label}");
-            DisplayText(66, 8, "Controls");
-            DisplayText(67, 9, "Move Up: Up Arrow");
-            DisplayText(67, 10, "Move Down: Down Arrow");
-            DisplayText(67, 11, "Move Left: Left Arrow");
-            DisplayText(67, 12, "Move Right: Right Arrow");
+            DisplayText(66, 6, $"Speed: {label}");
+            DisplayText(66, 9, "Controls");
+            DisplayText(67, 10, "Move Up: Up Arrow");
+            DisplayText(67, 11, "Move Down: Down Arrow");
+            DisplayText(67, 12, "Move Left: Left Arrow");
+            DisplayText(67, 13, "Move Right: Right Arrow");
         }
 
         private static void DisplayText(int xCoordinate, int yCoordinate, string text)
