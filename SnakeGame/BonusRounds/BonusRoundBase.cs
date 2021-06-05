@@ -12,16 +12,12 @@ namespace SnakeGame.Source.BonusRounds
         protected IPrizeSetter _prizeSetter;
         protected IPrizeDeclarator _prizeDeclarator;
 
-        protected static Dictionary<int, PrizeType> doorToPrize = new Dictionary<int, PrizeType> 
-        { 
-            { 1, PrizeType.DEAD },
-            { 2, PrizeType.DEAD },
-            { 3, PrizeType.DEAD }
-        };
-        protected static Dictionary<int, Dictionary<string, List<int>>> doorToCoordinates = new Dictionary<int, Dictionary<string, List<int>>>();
+        protected static Dictionary<int, PrizeType> doorToPrize;
+        protected static Dictionary<int, Dictionary<string, List<int>>> doorToCoordinates;
         protected int doorsCount = 3;
         public BonusRoundBase()
         {
+            Initialize();
         }
 
         public BonusRoundBase(IBonusLayoutDrawer bonusLayout, IPrizeSetter prizeSetter, IPrizeDeclarator prizeDeclarator)
@@ -29,6 +25,17 @@ namespace SnakeGame.Source.BonusRounds
             _bonusLayout = bonusLayout;
             _prizeDeclarator = prizeDeclarator;
             _prizeSetter = prizeSetter;
+        }
+
+        protected static void Initialize()
+        {
+            doorToPrize = new Dictionary<int, PrizeType>
+            {
+                { 1, PrizeType.DEAD },
+                { 2, PrizeType.DEAD },
+                { 3, PrizeType.DEAD }
+            };
+            doorToCoordinates = new Dictionary<int, Dictionary<string, List<int>>>();
         }
     }
 }

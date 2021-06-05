@@ -18,7 +18,9 @@ namespace SnakeGame.Source.BonusRounds.Prize_Declarators
                 if (Enumerable.Range(xCoordinateRange[0], xCoordinateRange[1]  - xCoordinateRange[0] + 1).Contains(coordinates.Key)
                     && Enumerable.Range(yCoordinateRange[0], yCoordinateRange[1] - yCoordinateRange[0] + 1).Contains(coordinates.Value))
                 {
-                    return doorToPrize[doorNumber];
+                    var prize =  doorToPrize[doorNumber];
+                    Initialize();
+                    return prize;
                 }
             }
             return PrizeType.NONE;
