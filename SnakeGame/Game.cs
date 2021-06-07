@@ -366,6 +366,7 @@ namespace SnakeGame.Source
                 GetNewLevelFromLevelContext();
                 totalEatCounter = 0;
                 lives = 0;
+                isOver = false;
             }
             remainingEatCounter = 10;
             sleepTime = 400;
