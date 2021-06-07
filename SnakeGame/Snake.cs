@@ -15,7 +15,7 @@ namespace SnakeGame.Source
         public Snake(int bodyPartCount)
         {
             xCoordinate = 15;
-            yCoordinate = 16;
+            yCoordinate = 17;
             BodyParts = new List<BodyPart>();
             Generate(bodyPartCount);
         }
@@ -23,7 +23,7 @@ namespace SnakeGame.Source
         public Snake(List<Pixel> pixels)
         {
             xCoordinate = 15;
-            yCoordinate = 16;
+            yCoordinate = 17;
             BodyParts = new List<BodyPart>();
             GenerateFromCoordinates(pixels);
         }
@@ -97,7 +97,7 @@ namespace SnakeGame.Source
                 Console.SetCursorPosition(xCoordinate, yCoordinate);
                 Console.Write(" ");
                 snakeBodyParts[i].Pixel.XCoordinate = i + 15;
-                snakeBodyParts[i].Pixel.YCoordinate = 16;
+                snakeBodyParts[i].Pixel.YCoordinate = 17;
                 snakeBodyParts[i].Pixel.CurrentDirection = Direction.RIGHT;
             }
         }

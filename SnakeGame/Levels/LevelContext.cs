@@ -22,6 +22,10 @@ namespace SnakeGame.Source.Levels
                 {3, new Level3(new FoodGenerationStrategies.Strategies.Level3Strategy(),
                                new ObstacleLayoutStrategies.Strategies.Level3Strategy(),
                                new GameOverStrategies.Strategies.Level3Strategy())                                  
+                },
+                {4, new Level4(new FoodGenerationStrategies.Strategies.Level4Strategy(),
+                               new ObstacleLayoutStrategies.Strategies.Level4Strategy(),
+                               new GameOverStrategies.Strategies.Level4Strategy())
                 }
             };
         }

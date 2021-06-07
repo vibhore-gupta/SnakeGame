@@ -37,9 +37,9 @@ namespace SnakeGame.Tests.GameOverStrategies
         }
 
         [Theory]
-        [InlineData(15, 16, true)]
-        [InlineData(16, 16, true)]
-        [InlineData(18, 16, false)]
+        [InlineData(15, 17, true)]
+        [InlineData(16, 17, true)]
+        [InlineData(18, 17, false)]
         public void Level3Strategy_WhenSnakeIsHittingItSelf_ReturnsIfGameIsOver(int headXCoordinate, int headYCoordinate,
             bool expectedResult)
         {

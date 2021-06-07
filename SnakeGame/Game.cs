@@ -16,7 +16,7 @@ namespace SnakeGame.Source
         private int score;
         private int remainingEatCounter = 10;
         private int totalEatCounter;
-        private int sleepTime = 400;
+        private int sleepTime;
         private bool isCurrentLevelCompleted;
         private DateTime foodStartTime = DateTime.Now;
         private ILevel level;
@@ -32,7 +32,7 @@ namespace SnakeGame.Source
 
         private static readonly LevelContext levelContext = new LevelContext();
         private static readonly BonusContext bonusContext = new BonusContext();
-        private static readonly int totalLevels = 3;
+        private static readonly int totalLevels = 4;
         private static readonly ConsoleKey[] AllowedKeys = new ConsoleKey[]
         {
             ConsoleKey.UpArrow,
@@ -45,6 +45,7 @@ namespace SnakeGame.Source
         {
             level = levelContext.Get(levelNumber);
             snake = new Snake(1);
+            sleepTime = Constants.levelToSleepTime[levelNumber].Key;
         }
 
         public void RestartLoop()
@@ -366,10 +367,10 @@ namespace SnakeGame.Source
                 GetNewLevelFromLevelContext();
                 totalEatCounter = 0;
                 lives = 0;
-                isOver = false;
+                isOver = false;                
             }
             remainingEatCounter = 10;
-            sleepTime = 400;
+            sleepTime = Constants.levelToSleepTime[levelNumber].Key;
             isCurrentLevelCompleted = false;
         }
 
@@ -442,7 +443,7 @@ namespace SnakeGame.Source
 
         private void ChangeSleepTime()
         {
-            sleepTime -= 30;
+            sleepTime -= Constants.levelToSleepTime[levelNumber].Value;
         }
 
         private void IncrementEatCounter()
