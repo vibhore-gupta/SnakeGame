@@ -18,7 +18,7 @@ namespace SnakeGame.Source
         private int totalEatCounter;
         private int sleepTime;
         private bool isCurrentLevelCompleted;
-        private DateTime foodStartTime = DateTime.Now;
+        private DateTime foodStartTime;
         private ILevel level;
         private IBonusRound bonusRound;
         private int foodX;
@@ -46,6 +46,7 @@ namespace SnakeGame.Source
             level = levelContext.Get(levelNumber);
             snake = new Snake(1);
             sleepTime = Constants.levelToSleepTime[levelNumber].Key;
+            foodStartTime = DateTime.Now;
         }
 
         public void RestartLoop()
@@ -206,16 +207,6 @@ namespace SnakeGame.Source
         {
             while (true)
             {
-                //if (false)
-                //{
-                //    if (IsSnakeApproaching())
-                //    {
-                //        Console.SetCursorPosition(foodX, foodY);
-                //        Console.Write(" ");
-                //        (foodX, foodY) = GetNewFoodCoordinates();
-                //        RedrawFood();
-                //    }
-                //}
                 if (IsLevelCompleted())
                 {
                     if (CheckIfAllLevelsDone())
@@ -257,34 +248,6 @@ namespace SnakeGame.Source
                 }
                 Thread.Sleep(sleepTime);
             }
-        }
-
-        private void RedrawFood()
-        {
-            Console.SetCursorPosition(foodX, foodY);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(Constants.hexUnicode);
-        }
-
-        //private (int foodX, int foodY) GetNewFoodCoordinates()
-        //{
-        //    var headPixel = snake.GetPixelByBodyType(BodyPartType.HEAD);
-        //    return SnakeBuilderHelper.ReDraw(snake.GetSnakeCoordinates(), headPixel.CurrentDirection, foodX, foodY);
-        //}
-
-        private bool IsSnakeApproaching()
-        {
-            var headX = snake.BodyParts[^1].Pixel.XCoordinate;
-            var headY = snake.BodyParts[^1].Pixel.YCoordinate;
-
-            return (foodX - headX >= 0 && foodX - headX <= 3 && foodY - headY >= 0 && foodY - headY <= 1)
-                || (foodX - headX >= 0 && foodX - headX <= 3 && headY - foodY >= 0 && headY - foodY <= 1) // left side approach
-                || (foodY - headY >= 0 && foodY - headY <= 1 && foodX - headX >= 0 && foodX - headX <= 3)
-                || (foodY - headY >= 0 && foodY - headY <= 1 && headX - foodX >= 0 && headX - foodX <= 3) // top side approach
-                || (headX - foodX >= 0 && headX - foodX <= 3 && foodY - headY >= 0 && foodY - headY <= 1)
-                || (headX - foodX >= 0 && headX - foodX <= 3 && headY - foodY >= 0 && headY - foodY <= 1) // right side approach
-                || (headY - foodY >= 0 && headY - foodY <= 1 && foodX - headX >= 0 && foodX - headX <= 3)
-                || (headY - foodY >= 0 && headY - foodY <= 1 && headX - foodX >= 0 && headX - foodX <= 3); // bottom side approach
         }
 
         private void SetAndCheckBonusRound()
