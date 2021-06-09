@@ -92,10 +92,6 @@ namespace SnakeGame.Source
             var snakeBodyParts = BodyParts;
             for (var i = 0; i < snakeBodyParts.Count; i++)
             {
-                var xCoordinate = snakeBodyParts[i].Pixel.XCoordinate;
-                var yCoordinate = snakeBodyParts[i].Pixel.YCoordinate;
-                Console.SetCursorPosition(xCoordinate, yCoordinate);
-                Console.Write(" ");
                 snakeBodyParts[i].Pixel.XCoordinate = i + 15;
                 snakeBodyParts[i].Pixel.YCoordinate = 17;
                 snakeBodyParts[i].Pixel.CurrentDirection = Direction.RIGHT;
