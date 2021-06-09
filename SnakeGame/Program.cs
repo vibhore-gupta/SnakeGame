@@ -1,10 +1,13 @@
-﻿namespace SnakeGame.Source
+﻿using SnakeGame.Source.GamingConsole;
+
+namespace SnakeGame.Source
 {
     class Program
     {   
         static void Main()
         {
-            var game = new Game();
+            var gameConsole = new GameConsole();
+            var game = new Game(gameConsole);
             game.Start();
             game.RestartLoop();
         }
