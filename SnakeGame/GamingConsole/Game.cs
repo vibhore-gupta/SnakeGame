@@ -96,7 +96,7 @@ namespace SnakeGame.Source.GamingConsole
                     new KeyValuePair<int, int>(0, Constants.height + 1),
                     new KeyValuePair<int, int>(0, Constants.height + 2)
                 }, 100);
-                
+                DrawSnake(snake, " ");
                 snake.Reposition();
                 level.Drawlayout();
                 DisplayStatisticsAndGameControls();
@@ -420,13 +420,14 @@ namespace SnakeGame.Source.GamingConsole
             DisplayStatisticsAndGameControls();
         }
 
-        private void DrawSnake(Snake snake)
+        private void DrawSnake(Snake snake, string text = "")
         {
+            var textToWrite = string.IsNullOrEmpty(text) ? Constants.hexUnicode : text;
             var snakeBodyParts = snake.BodyParts;
             for (var i = 0; i < snakeBodyParts.Count; i++)
             {
                 var snakePart = snakeBodyParts[i].Pixel;
-                DisplayText(snakePart.XCoordinate, snakePart.YCoordinate, Constants.hexUnicode, snakePart.ConsoleColor);
+                DisplayText(snakePart.XCoordinate, snakePart.YCoordinate, textToWrite, snakePart.ConsoleColor);
             }
             console.HideCursor();
         }
