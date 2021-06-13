@@ -1,4 +1,6 @@
-﻿using SnakeGame.Source.GamingConsole;
+﻿using SnakeGame.Source.BonusRounds;
+using SnakeGame.Source.GamingConsole;
+using SnakeGame.Source.Levels;
 
 namespace SnakeGame.Source
 {
@@ -7,7 +9,9 @@ namespace SnakeGame.Source
         static void Main()
         {
             var gameConsole = new GameConsole();
-            var game = new Game(gameConsole);
+            var levelContext = new LevelContext();
+            var bonusContext = new BonusContext();
+            var game = new Game(gameConsole, levelContext, bonusContext);
             game.Start();
             game.RestartLoop();
         }

@@ -1,8 +1,7 @@
-﻿using SnakeGame.Source.BonusRounds;
-using SnakeGame.Source.BonusRounds.Interfaces;
+﻿using SnakeGame.Source.BonusRounds.Interfaces;
 using SnakeGame.Source.Common;
+using SnakeGame.Source.Contexts;
 using SnakeGame.Source.Enums;
-using SnakeGame.Source.Levels;
 using SnakeGame.Source.Levels.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -31,8 +30,8 @@ namespace SnakeGame.Source.GamingConsole
         private bool restartRound;
         private int lives;
 
-        private static readonly LevelContext levelContext = new LevelContext();
-        private static readonly BonusContext bonusContext = new BonusContext();
+        private readonly Context<ILevel> levelContext;
+        private readonly Context<IBonusRound> bonusContext;
         private static readonly int totalLevels = 4;
         private static readonly ConsoleKey[] AllowedKeys = new ConsoleKey[]
         {
@@ -42,13 +41,15 @@ namespace SnakeGame.Source.GamingConsole
             ConsoleKey.RightArrow
         };
 
-        public Game(IConsole console)
+        public Game(IConsole console, Context<ILevel> levelContextBase, Context<IBonusRound> bonusContextBase)
         {
             this.console = console;
+            levelContext = levelContextBase;
+            bonusContext = bonusContextBase;
             level = levelContext.Get(levelNumber);
             snake = new Snake(1);
             sleepTime = Constants.levelToSleepTime[levelNumber].Key;
-            foodStartTime = DateTime.Now;
+            foodStartTime = DateTime.Now;            
         }
 
         public void RestartLoop()
